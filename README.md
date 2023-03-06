@@ -108,7 +108,12 @@ SpeedChecker is offering different types of licenses:
 
 #### **Is the SDK free to use?**
 
-Yes! But the SDK collects data on network performance from your app and shares it with Speedchecker and our clients.The free SDK version requires and enabled location. Those restrictions are not in the Basic and Advanced versions
+Yes! But the SDK collects data on network performance from your app and shares it with Speedchecker and our clients. The free SDK version requires and enabled location. Those restrictions are not in the Basic and Advanced versions
+
+### **Do you have also native SDKs?**
+
+Yes, we have both [Android](https://github.com/speedchecker/speedchecker-sdk-android) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios) SDKs.
+
 
 #### **Does SDK support other types of tests?**
 
@@ -134,7 +139,7 @@ See our [measurement methodology](https://docs.speedchecker.com/measurement-meth
 
 ## What's next?
 
-Please contact us for more details and license requirements. Also, you can download the latest framework version, the sample app to see detailed implementation in the Xcode project as well as our Internet Speed Test application on App Store.
+Please contact us for more details and license requirements.
 
 * [More information about SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-apps-and-sdks.html)
 * [API documentation](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation)
