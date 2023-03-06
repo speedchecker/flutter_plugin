@@ -86,6 +86,8 @@ Do not forget to close the stream to prevent memory leaks. It can be done by ove
 		super.dispose();
 	  }
 ````
+## Demo application
+Please check our [demo application](https://github.com/speedchecker/flutter_plugin) in Flutter which includes speed test functionality as well as speedometer UI.
 
 ## License
 
