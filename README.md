@@ -1,10 +1,10 @@
-# SpeedChecker SDK Plugin
+# SpeedChecker Flutter Plugin
 
 [![pub package](https://img.shields.io/pub/v/speed_checker_plugin)](https://pub.dartlang.org/packages/speed_checker_plugin)
 
 ## Free speed test features for your own app
 
-SpeedChecker SDK plugin allows developers to integrate speed test features into their own flutter apps. You can also try our apps on [Google Play](https://play.google.com/store/apps/details?id=uk.co.broadbandspeedchecker\&hl=en\_US) and [App Store](https://itunes.apple.com/app/id658790195), they are powered by the latest Speedchecker SDK versions. More information about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-apps-and-sdks.html)
+SpeedChecker Flutter plugin allows developers to integrate speed test features into their own flutter apps. You can also try our apps on [Google Play](https://play.google.com/store/apps/details?id=uk.co.broadbandspeedchecker\&hl=en\_US) and [App Store](https://itunes.apple.com/app/id658790195), they are powered by the latest Speedchecker SDK versions. More information about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-apps-and-sdks.html)
 
 ## Features
 
