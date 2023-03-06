@@ -1,6 +1,6 @@
 # SpeedChecker SDK Plugin
 
-[![pub package](https://img.shields.io/pub/v/pdf_viewer_plugin.svg)](https://pub.dartlang.org/packages/pdf_viewer_plugin)
+[![pub package](https://img.shields.io/pub/v/speed_checker_plugin)](https://pub.dartlang.org/packages/speed_checker_plugin)
 
 ## Free speed test features for your own app
 
