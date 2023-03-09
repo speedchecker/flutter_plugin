@@ -58,6 +58,11 @@ dependencies:
 import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 ```
 
+## Permission requirements
+
+Free version of the plugin requires location permission to be able to perform speed test. You need to handle location permission in your app level.
+Check out our [location policy](https://github.com/speedchecker/flutter_plugin/wiki/Privacy-&-consent)
+
 ## Usage
 
 #### 1. Create an instance of 'SpeedCheckerPlugin' class and all variables you need to store speed test results.**
@@ -68,8 +73,8 @@ String _status = '';
 int _ping = 0;
 String _server = '';
 String _connectionType = '';
-double _currentSpeed = 0; // real-time value of the current test speed (download or upload)
-int _percent = 0; // real-time value of the current test progress (download or upload)
+double _currentSpeed = 0;
+int _percent = 0;
 double _downloadSpeed = 0;
 double _uploadSpeed = 0;
 ```
@@ -100,29 +105,6 @@ _plugin.speedTestResultStream.listen((result) {
   _connectionType = result.connectionType;
 });
 ```
-
-Currently, the plugin supports the following speed test result parameters:
-| SpeedTest parameters |
-| -------------- |
-| String status|
-| int ping|
-| int jitter|
-| int percent|
-| double currentSpeed|
-| double downloadSpeed|
-| double uploadSpeed|
-| String server|
-| String connectionType|
-| String serverInfo|
-| double locationLatitude|
-| double locationLongitude|
-| double locationAccuracy|
-| String deviceInfo|
-| String cityName|
-| double downloadTransferredMb|
-| double uploadTransferredMb|
-| String error|
-| String warning|
 
 #### 5. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
 
@@ -166,19 +148,18 @@ enabled location. Those restrictions are not in the Basic and Advanced versions
 Yes, we have both [Android](https://github.com/speedchecker/speedchecker-sdk-android) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios)
 SDKs.
 
-#### **Does SDK support other types of tests?**
+#### **Do you provide other types of tests?**
 
-Yes! YouTube video streaming, Voice over IP and other tests are there as well. Check out
-our [API documentation](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation)
+Yes! YouTube video streaming, Voice over IP and other tests are supported by our native SDK libraries. Check out our [Android](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios/wiki/API-documentation) API documentation 
 
 #### **Do you provide free support?**
 
 No, we provide support only on Basic and Advanced plans
 
-#### **What are all the metrics or KPIs that you can get using our SDKs?**
+#### **What are all the metrics or KPIs that you can get using our native SDKs?**
 
-The free version of the SDK allows getting basic metrics which are described in
-this [API documentation](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation)
+The free version of our plugin allows getting basic metrics which are described in
+this [API documentation](https://github.com/speedchecker/flutter_plugin/wiki/API-documentation)
 
 [Full list of our KPIs for Basic and Advanced versions](https://docs.speedchecker.com/measurement-methodology-links/u21ongNGAYLb6eo7cqjY/kpis-and-measurements/list-of-kpis)
 
@@ -197,6 +178,6 @@ our [measurement methodology](https://docs.speedchecker.com/measurement-methodol
 Please contact us for more details and license requirements.
 
 * [More information about SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-apps-and-sdks.html)
-* [API documentation](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation)
+* [API documentation](https://github.com/speedchecker/flutter_plugin/wiki/API-documentation)
 * [Buy license](https://www.speedchecker.com/contact-us.html)
 * [Contact us](https://www.speedchecker.com/contact-us.html)

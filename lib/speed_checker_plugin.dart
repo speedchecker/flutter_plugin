@@ -22,11 +22,7 @@ class SpeedCheckerPlugin {
           server: event['server']?.toString() ?? '',
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
-          locationLatitude: event['locationLatitude']?.toDouble() ?? 0.0,
-          locationLongitude: event['locationLongitude']?.toDouble() ?? 0.0,
-          locationAccuracy: event['locationAccuracy']?.toDouble() ?? 0.0,
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          cityName: event['cityName']?.toString() ?? '',
           downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
@@ -52,11 +48,7 @@ class SpeedCheckerPlugin {
           server: event['server']?.toString() ?? '',
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
-          locationLatitude: event['locationLatitude']?.toDouble() ?? 0.0,
-          locationLongitude: event['locationLongitude']?.toDouble() ?? 0.0,
-          locationAccuracy: event['locationAccuracy']?.toDouble() ?? 0.0,
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          cityName: event['cityName']?.toString() ?? '',
           downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
@@ -83,11 +75,7 @@ class SpeedTestResult {
   final String server;
   final String connectionType;
   final String serverInfo;
-  final double locationLatitude;
-  final double locationLongitude;
-  final double locationAccuracy;
   final String deviceInfo;
-  final String cityName;
   final double downloadTransferredMb;
   final double uploadTransferredMb;
   final String error;
@@ -104,11 +92,7 @@ class SpeedTestResult {
     this.server = '',
     this.connectionType = '',
     this.serverInfo = '',
-    this.locationLatitude = 0.0,
-    this.locationLongitude = 0.0,
-    this.locationAccuracy = 0.0,
     this.deviceInfo = '',
-    this.cityName = '',
     this.downloadTransferredMb = 0.0,
     this.uploadTransferredMb = 0.0,
     this.error = '',
@@ -127,11 +111,7 @@ class SpeedTestResult {
       server: json['server']?.toString() ?? "",
       connectionType: json['connectionType']?.toString() ?? "",
       serverInfo: json['serverInfo']?.toString() ?? "",
-      locationLatitude: json['locationLatitude']?.toDouble() ?? 0,
-      locationLongitude: json['locationLongitude']?.toDouble() ?? 0,
-      locationAccuracy: json['locationAccuracy']?.toDouble() ?? 0,
       deviceInfo: json['deviceInfo']?.toString() ?? "",
-      cityName: json['cityName']?.toString() ?? "",
       downloadTransferredMb: json['downloadTransferredMb']?.toDouble() ?? 0,
       uploadTransferredMb: json['uploadTransferredMb']?.toDouble() ?? 0,
       error: json['error']?.toString() ?? "",

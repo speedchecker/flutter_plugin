@@ -54,11 +54,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 						map.put("uploadSpeed", 0);
 						map.put("connectionType", "");
 						map.put("serverInfo", "");
-						map.put("locationLatitude", 0F);
-						map.put("locationLongitude", 0F);
-						map.put("locationAccuracy", 0F);
 						map.put("deviceInfo", "");
-						map.put("cityName", "");
 						map.put("downloadTransferredMb", 0.0);
 						map.put("uploadTransferredMb", 0.0);
 						eventSink.success(map);
@@ -84,11 +80,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 						map.put("uploadSpeed", speedTestResult.getUploadSpeed());
 						map.put("connectionType", speedTestResult.getConnectionTypeHuman());
 						map.put("serverInfo", speedTestResult.getServerInfo());
-						map.put("locationLatitude", speedTestResult.getLocationLatitude());
-						map.put("locationLongitude", speedTestResult.getLocationLongitude());
-						map.put("locationAccuracy", speedTestResult.getLocationAccuracy());
 						map.put("deviceInfo", speedTestResult.getDeviceInfo());
-						map.put("cityName", speedTestResult.getCityName());
 						map.put("downloadTransferredMb", speedTestResult.getDownloadTransferredMb());
 						map.put("uploadTransferredMb", speedTestResult.getUploadTransferredMb());
 						eventSink.success(map);

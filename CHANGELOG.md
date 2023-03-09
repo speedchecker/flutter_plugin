@@ -5,3 +5,7 @@
 ## 1.0.1
 
 * Added speed test with custom server, added more speed test result parameters.
+
+## 1.0.2
+
+* Reworked Readme and added API documentation.
