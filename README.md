@@ -65,7 +65,7 @@ Check out our [location policy](https://github.com/speedchecker/flutter_plugin/w
 
 ## Usage
 
-#### 1. Create an instance of 'SpeedCheckerPlugin' class and all variables you need to store speed test results.**
+#### 1. Create an instance of 'SpeedCheckerPlugin' class and all variables you need to store speed test results
 
 ```dart
 final _plugin = SpeedCheckerPlugin();
@@ -91,7 +91,7 @@ _plugin.startSpeedTest();
 _plugin.startSpeedTestWithCustomServer('mydomain');
 ```
 
-#### 4. Listen to 'speedTestResultStream'.
+#### 4. Listen to 'speedTestResultStream'
 
 ```dart
 _plugin.speedTestResultStream.listen((result) {
@@ -138,7 +138,7 @@ SpeedChecker is offering different types of licenses:
 
 ## FAQ
 
-#### **Is the SDK free to use?**
+### **Is the SDK free to use?**
 
 Yes! But the SDK collects data on network performance from your app and shares it with Speedchecker and our clients. The free SDK version requires and
 enabled location. Those restrictions are not in the Basic and Advanced versions
@@ -148,27 +148,27 @@ enabled location. Those restrictions are not in the Basic and Advanced versions
 Yes, we have both [Android](https://github.com/speedchecker/speedchecker-sdk-android) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios)
 SDKs.
 
-#### **Do you provide other types of tests?**
+### **Do you provide other types of tests?**
 
 Yes! YouTube video streaming, Voice over IP and other tests are supported by our native SDK libraries. Check out our [Android](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios/wiki/API-documentation) API documentation 
 
-#### **Do you provide free support?**
+### **Do you provide free support?**
 
 No, we provide support only on Basic and Advanced plans
 
-#### **What are all the metrics or KPIs that you can get using our native SDKs?**
+### **What are all the metrics or KPIs that you can get using our native SDKs?**
 
 The free version of our plugin allows getting basic metrics which are described in
 this [API documentation](https://github.com/speedchecker/flutter_plugin/wiki/API-documentation)
 
 [Full list of our KPIs for Basic and Advanced versions](https://docs.speedchecker.com/measurement-methodology-links/u21ongNGAYLb6eo7cqjY/kpis-and-measurements/list-of-kpis)
 
-#### **Do you host all infrastructure for the test?**
+### **Do you host all infrastructure for the test?**
 
 Yes, you do not need to run any servers. We provide and maintain a network of high-quality servers and CDNs to ensure the testing is accurate. If you
 wish to configure your own server, this is possible on Basic and Advanced plans.
 
-#### **How do you measure the speed?**
+### **How do you measure the speed?**
 
 See
 our [measurement methodology](https://docs.speedchecker.com/measurement-methodology-links/u21ongNGAYLb6eo7cqjY/kpis-and-measurements/data-collection-methodologies)
