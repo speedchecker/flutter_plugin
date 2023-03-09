@@ -27,16 +27,19 @@ import io.flutter.plugin.common.MethodChannel;
 public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler {
 
 	private static final String EVENT_CHANNEL = "speedChecker_eventChannel";
+	private static final String METHOD_CHANNEL = "speedChecker_methodChannel";
 	private EventChannel.EventSink eventSink;
 	private final Map<String, Object> map = new HashMap<>();
 	private Context context;
 	private String domain = "";
-	private String ip = "";
 
 	@Override
 	public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
 		EventChannel eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), EVENT_CHANNEL);
+		MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), METHOD_CHANNEL);
+		channel.setMethodCallHandler(this);
 		context = flutterPluginBinding.getApplicationContext();
+
 		eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
 			@Override
 			public void onListen(Object arguments, EventChannel.EventSink events) {
@@ -192,10 +195,19 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 
 	private void startTest(Context context) {
 		SpeedcheckerSDK.init(context);
-		if (!domain.isEmpty() && !ip.isEmpty() && !domain.equals("null") && !ip.equals("null")) {
+		if (!domain.isEmpty() && !domain.equals("null")) {
 			Server server = new Server();
 			server.Domain = domain;
-			server.UserIP = ip;
+			server.DownloadFolderPath = "\\/speedchecker/";
+			server.Id = 41;
+			server.Scheme = "https";
+			server.Script = "php";
+			server.UploadFolderPath = "\\/speedchecker/";
+			server.Version = 3;
+			server.Location = server.new Location();
+			server.Location.City = "London";
+			server.Location.Country = "UK";
+			server.Location.CountryCode = "GB";
 			SpeedcheckerSDK.SpeedTest.startTest(context, server);
 		} else SpeedcheckerSDK.SpeedTest.startTest(context);
 	}
@@ -208,7 +220,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 	public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
 		if (call.method.equals("customServer")) {
 			domain = call.argument("domain");
-			ip = call.argument("ip");
 			result.success("Custom server set");
 		} else {
 			result.notImplemented();

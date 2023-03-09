@@ -33,8 +33,8 @@ class SpeedCheckerPlugin {
     });
   }
 
-  void startSpeedTestWithCustomServer(String domain, String ip) {
-    const MethodChannel('speedChecker_methodChannel').invokeMethod('customServer', {'domain': domain, 'ip': ip});
+  void startSpeedTestWithCustomServer(String domain) {
+    const MethodChannel('speedChecker_methodChannel').invokeMethod('customServer', {'domain': domain});
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult(

@@ -60,7 +60,7 @@ import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 
 ## Permission requirements
 
-Free version of the plugin requires location permission to be able to perform speed test. You need to handle location permission in your app level.
+Free version of the plugin requires location permission to be able to perform a speed test. You need to handle location permission in your app level.
 Check out our [location policy](https://github.com/speedchecker/flutter_plugin/wiki/Privacy-&-consent)
 
 ## Usage
@@ -85,10 +85,10 @@ double _uploadSpeed = 0;
 _plugin.startSpeedTest();
 ```
 
-#### 3. Plugin supports starting speed test with custom server. You can pass server domain and IP as String parameters to 'startSpeedTest' method
+#### 3. Plugin supports starting speed test with custom server. You can pass server domain as a String parameter to 'startSpeedTest' method
 
 ```dart
-_plugin.startSpeedTestWithCustomServer('mydomain', 'myIP');
+_plugin.startSpeedTestWithCustomServer('mydomain');
 ```
 
 #### 4. Listen to 'speedTestResultStream'.
