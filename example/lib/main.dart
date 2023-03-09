@@ -25,9 +25,7 @@ class _MyAppState extends State<MyApp> {
   int _percent = 0;
   double _downloadSpeed = 0;
   double _uploadSpeed = 0;
-  String _error = '';
-  String _warning = '';
-  final _controller = SpeedCheckerPlugin();
+  final _plugin = SpeedCheckerPlugin();
 
   @override
   void initState() {
@@ -35,13 +33,13 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   void dispose() {
-    _controller.dispose();
+    _plugin.dispose();
     super.dispose();
   }
 
   void getSpeedStats() {
-    _controller.startSpeedTest();
-    _controller.speedTestResultStream.listen((result) {
+    _plugin.startSpeedTest();
+    _plugin.speedTestResultStream.listen((result) {
       setState(() {
         _status = result.status;
         _ping = result.ping;
@@ -51,8 +49,6 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        _error = result.error;
-        _warning = result.warning;
       });
     });
   }
