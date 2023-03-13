@@ -31,6 +31,18 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 * minSdkVersion 19
 * Location permissions
 
+By default, flutter projects have minSdkVersion set to 16. You need to change this to 19. You can find this setting in build.gradle file: Your_project_folder/android/app/build.gradle
+
+```gradle
+    defaultConfig {
+    applicationId "com.example.test_project"
+        minSdkVersion flutter.minSdkVersion  //REPLACE "flutter.minSdkVersion" to 19 
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+     }
+````
+
 #### iOS
 
 * Xcode 13.3.1 or later
@@ -46,7 +58,7 @@ $ flutter pub add speed_checker_plugin
 ``` 
 
 This will add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
-    
+
 ```yaml
 dependencies:
   speed_checker_plugin: ^1.0.0
@@ -150,7 +162,7 @@ SDKs.
 
 ### **Do you provide other types of tests?**
 
-Yes! YouTube video streaming, Voice over IP and other tests are supported by our native SDK libraries. Check out our [Android](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios/wiki/API-documentation) API documentation 
+Yes! YouTube video streaming, Voice over IP and other tests are supported by our native SDK libraries. Check out our [Android](https://github.com/speedchecker/speedchecker-sdk-android/wiki/API-documentation) and [iOS](https://github.com/speedchecker/speedchecker-sdk-ios/wiki/API-documentation) API documentation
 
 ### **Do you provide free support?**
 
