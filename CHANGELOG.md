@@ -9,3 +9,12 @@
 ## 1.0.2
 
 * Reworked Readme and added API documentation.
+
+## 1.0.3
+
+* fixed custom server test.
+
+## 1.0.4
+
+* added more parameters to custom server test.
+

@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
   }
+
   @override
   void dispose() {
     _plugin.dispose();
@@ -78,7 +79,8 @@ class _MyAppState extends State<MyApp> {
                             color: Color(SpeedMeter.mainRedColor)))),
                 Container(
                   margin: const EdgeInsets.only(top: 30, bottom: 50),
-                  child: SpeedMeter(currentSpeed: _currentSpeed, percent: _percent),
+                  child: SpeedMeter(
+                      currentSpeed: _currentSpeed, percent: _percent),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -107,11 +109,26 @@ class _MyAppState extends State<MyApp> {
                     direction: Axis.vertical,
                     spacing: 10,
                     children: [
-                      Text('Server: $_server', style: const TextStyle(fontSize: 16),),
-                      Text('Ping: $_ping', style: const TextStyle(fontSize: 16),),
-                      Text('Download speed: ${_downloadSpeed.toStringAsFixed(2)} Mbps', style: const TextStyle(fontSize: 16),),
-                      Text('Upload speed: ${_uploadSpeed.toStringAsFixed(2)} Mbps', style: const TextStyle(fontSize: 16),),
-                      Text('Connection Type: $_connectionType', style: const TextStyle(fontSize: 16),),
+                      Text(
+                        'Server: $_server',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Ping: $_ping',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Download speed: ${_downloadSpeed.toStringAsFixed(2)} Mbps',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Upload speed: ${_uploadSpeed.toStringAsFixed(2)} Mbps',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Connection Type: $_connectionType',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                 )
@@ -143,156 +160,156 @@ class SpeedMeter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Stack(
-          children: [
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(currentSpeed.toStringAsFixed(2),
-                      style: const TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.8,
-                          color: Color(mainRedColor))),
-                  const Text('Mbps',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Color(blackTextColor))),
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Progress: '.toUpperCase(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                letterSpacing: -0.8,
-                                color: Color(blackTextColor)),
-                          ),
-                          SizedBox(
-                            width: 40,
-                            child: Text(
-                              "${percent.round()}%",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Color(mainRedColor)),
-                            ),
-                          )
-                        ]),
-                  ),
-                  Container(
-                    width: 100,
-                    margin: const EdgeInsets.only(top: 3),
-                    child: SfLinearGauge(
-                      showLabels: false,
-                      showTicks: false,
-                      showAxisTrack: true,
-                      axisTrackStyle: LinearAxisTrackStyle(
-                        thickness: thickness,
-                        edgeStyle: LinearEdgeStyle.bothCurve,
-                        color: Colors.white,
+      children: [
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(currentSpeed.toStringAsFixed(2),
+                  style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.8,
+                      color: Color(mainRedColor))),
+              const Text('Mbps',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Color(blackTextColor))),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Progress: '.toUpperCase(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            letterSpacing: -0.8,
+                            color: Color(blackTextColor)),
                       ),
-                      barPointers: [
-                        LinearBarPointer(
-                          value: percent.toDouble(),
-                          thickness: thickness,
-                          edgeStyle: LinearEdgeStyle.bothCurve,
-                          shaderCallback: (Rect bounds) {
-                            return const LinearGradient(colors: [
-                              Color(startProgressColor),
-                              Color(endProgressColor)
-                            ], stops: [
-                              0.0,
-                              1.0
-                            ]).createShader(bounds);
-                          },
+                      SizedBox(
+                        width: 40,
+                        child: Text(
+                          "${percent.round()}%",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Color(mainRedColor)),
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 230,
-              height: 230,
-              child: SfRadialGauge(
-                axes: [
-                  RadialAxis(
-                    radiusFactor: 1,
-                    showLabels: false,
-                    showTicks: false,
-                    maximum: maxValue,
-                    startAngle: 90,
-                    endAngle: 360,
-                    axisLineStyle: AxisLineStyle(
-                      thickness: thickness,
-                      cornerStyle: CornerStyle.endCurve,
-                      color: Colors.white,
-                    ),
-                    pointers: <GaugePointer>[
-                      RangePointer(
-                        value: currentSpeed,
-                        width: thickness,
-                        cornerStyle: CornerStyle.endCurve,
-                        sizeUnit: GaugeSizeUnit.logicalPixel,
-                        enableAnimation: true,
-                        gradient: const SweepGradient(
-                          colors: [
-                            Color(startProgressColor),
-                            Color(endProgressColor)
-                          ],
-                          stops: <double>[0.0, 1.0],
-                        ),
-                      ),
-                    ],
-                  ),
-                  RadialAxis(
-                    showAxisLine: false,
-                    showLabels: false,
-                    showTicks: false,
-                    startAngle: 180,
-                    endAngle: 360,
-                    radiusFactor: 0.75,
-                    ranges: [
-                      GaugeRange(
-                        startValue: 0,
-                        endValue: 100,
-                        startWidth: 0,
-                        endWidth: thickness * 1.4,
-                        color: const Color(greyCircleColor),
                       )
-                    ],
+                    ]),
+              ),
+              Container(
+                width: 100,
+                margin: const EdgeInsets.only(top: 3),
+                child: SfLinearGauge(
+                  showLabels: false,
+                  showTicks: false,
+                  showAxisTrack: true,
+                  axisTrackStyle: LinearAxisTrackStyle(
+                    thickness: thickness,
+                    edgeStyle: LinearEdgeStyle.bothCurve,
+                    color: Colors.white,
                   ),
-                  RadialAxis(
-                    radiusFactor: 1.2,
-                    showAxisLine: false,
-                    showLabels: false,
-                    showTicks: true,
-                    maximum: 270,
-                    startAngle: 90,
-                    endAngle: 360,
-                    interval: 90,
-                    majorTickStyle: MajorTickStyle(
-                        length: thickness / 2,
-                        thickness: thickness / 4,
-                        color: const Color(tickColor)),
-                    minorTicksPerInterval: 8,
-                    tickOffset: thickness * 0.7,
-                    ticksPosition: ElementsPosition.outside,
-                    minorTickStyle: MinorTickStyle(thickness: thickness / 8),
+                  barPointers: [
+                    LinearBarPointer(
+                      value: percent.toDouble(),
+                      thickness: thickness,
+                      edgeStyle: LinearEdgeStyle.bothCurve,
+                      shaderCallback: (Rect bounds) {
+                        return const LinearGradient(colors: [
+                          Color(startProgressColor),
+                          Color(endProgressColor)
+                        ], stops: [
+                          0.0,
+                          1.0
+                        ]).createShader(bounds);
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 230,
+          height: 230,
+          child: SfRadialGauge(
+            axes: [
+              RadialAxis(
+                radiusFactor: 1,
+                showLabels: false,
+                showTicks: false,
+                maximum: maxValue,
+                startAngle: 90,
+                endAngle: 360,
+                axisLineStyle: AxisLineStyle(
+                  thickness: thickness,
+                  cornerStyle: CornerStyle.endCurve,
+                  color: Colors.white,
+                ),
+                pointers: <GaugePointer>[
+                  RangePointer(
+                    value: currentSpeed,
+                    width: thickness,
+                    cornerStyle: CornerStyle.endCurve,
+                    sizeUnit: GaugeSizeUnit.logicalPixel,
+                    enableAnimation: true,
+                    gradient: const SweepGradient(
+                      colors: [
+                        Color(startProgressColor),
+                        Color(endProgressColor)
+                      ],
+                      stops: <double>[0.0, 1.0],
+                    ),
+                  ),
+                ],
+              ),
+              RadialAxis(
+                showAxisLine: false,
+                showLabels: false,
+                showTicks: false,
+                startAngle: 180,
+                endAngle: 360,
+                radiusFactor: 0.75,
+                ranges: [
+                  GaugeRange(
+                    startValue: 0,
+                    endValue: 100,
+                    startWidth: 0,
+                    endWidth: thickness * 1.4,
+                    color: const Color(greyCircleColor),
                   )
                 ],
               ),
-            )
-          ],
-        ));
+              RadialAxis(
+                radiusFactor: 1.2,
+                showAxisLine: false,
+                showLabels: false,
+                showTicks: true,
+                maximum: 270,
+                startAngle: 90,
+                endAngle: 360,
+                interval: 90,
+                majorTickStyle: MajorTickStyle(
+                    length: thickness / 2,
+                    thickness: thickness / 4,
+                    color: const Color(tickColor)),
+                minorTicksPerInterval: 8,
+                tickOffset: thickness * 0.7,
+                ticksPosition: ElementsPosition.outside,
+                minorTickStyle: MinorTickStyle(thickness: thickness / 8),
+              )
+            ],
+          ),
+        )
+      ],
+    ));
   }
 }

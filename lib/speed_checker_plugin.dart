@@ -2,11 +2,14 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class SpeedCheckerPlugin {
-  static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
+  static const EventChannel _eventChannel =
+      EventChannel('speedChecker_eventChannel');
 
-  final _speedTestResultController = StreamController<SpeedTestResult>.broadcast();
+  final _speedTestResultController =
+      StreamController<SpeedTestResult>.broadcast();
 
-  Stream<SpeedTestResult> get speedTestResultStream => _speedTestResultController.stream;
+  Stream<SpeedTestResult> get speedTestResultStream =>
+      _speedTestResultController.stream;
 
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -33,8 +36,23 @@ class SpeedCheckerPlugin {
     });
   }
 
-  void startSpeedTestWithCustomServer(String domain) {
-    const MethodChannel('speedChecker_methodChannel').invokeMethod('customServer', {'domain': domain});
+  void startSpeedTestWithCustomServer(
+      {required String domain,
+      required String downloadFolderPath,
+      required String uploadFolderPath,
+      required String city,
+      required String country,
+      required String countryCode,
+      required int id}) {
+    const MethodChannel('speedChecker_methodChannel').invokeMethod('customServer', {
+      'domain': domain,
+      'downloadFolderPath': downloadFolderPath,
+      'uploadFolderPath': uploadFolderPath,
+      'city': city,
+      'country': country,
+      'countryCode': countryCode,
+      'id': id
+    });
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult(
@@ -49,7 +67,8 @@ class SpeedCheckerPlugin {
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
+          downloadTransferredMb:
+              event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',

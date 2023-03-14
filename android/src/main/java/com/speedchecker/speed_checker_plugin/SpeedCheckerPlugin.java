@@ -32,6 +32,12 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 	private final Map<String, Object> map = new HashMap<>();
 	private Context context;
 	private String domain = "";
+	private String downloadFolderPath = "";
+	private String uploadFolderPath = "";
+	private String city = "";
+	private String country = "";
+	private String countryCode = "";
+	private int id = 0;
 
 	@Override
 	public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -198,16 +204,16 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 		if (!domain.isEmpty() && !domain.equals("null")) {
 			Server server = new Server();
 			server.Domain = domain;
-			server.DownloadFolderPath = "\\/speedchecker/";
-			server.Id = 41;
+			server.DownloadFolderPath = downloadFolderPath;
+			server.Id = id;
 			server.Scheme = "https";
 			server.Script = "php";
-			server.UploadFolderPath = "\\/speedchecker/";
+			server.UploadFolderPath = uploadFolderPath;
 			server.Version = 3;
 			server.Location = server.new Location();
-			server.Location.City = "London";
-			server.Location.Country = "UK";
-			server.Location.CountryCode = "GB";
+			server.Location.City = city;
+			server.Location.Country = country;
+			server.Location.CountryCode = countryCode;
 			SpeedcheckerSDK.SpeedTest.startTest(context, server);
 		} else SpeedcheckerSDK.SpeedTest.startTest(context);
 	}
@@ -220,6 +226,12 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 	public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
 		if (call.method.equals("customServer")) {
 			domain = call.argument("domain");
+			downloadFolderPath = call.argument("downloadFolderPath");
+			uploadFolderPath = call.argument("uploadFolderPath");
+			city = call.argument("city");
+			country = call.argument("country");
+			countryCode = call.argument("countryCode");
+			id = call.argument("id");
 			result.success("Custom server set");
 		} else {
 			result.notImplemented();
