@@ -9,18 +9,51 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     private var locationManager = CLLocationManager()
     private var internetSpeedTest: InternetSpeedTest?
     
+    private var server: SpeedTestServer?
+    
     private var resultDict = [String: Any]()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "speed_checker_plugin", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "speedChecker_methodChannel", binaryMessenger: registrar.messenger())
         let instance = SpeedCheckerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         instance.requestLocation()
         instance.setupEventChannel(messanger: registrar.messenger())
     }
     
+    // MARK: - Handle Flutter method calls
+    
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        result("iOS " + UIDevice.current.systemVersion)
+        guard let method = Method(rawValue: call.method) else {
+            result(FlutterMethodNotImplemented)
+            return
+        }
+        
+        switch method {
+        case .customServer:
+            handleCustomServerMethod(call.arguments, result: result)
+        }
+    }
+    
+    private func handleCustomServerMethod(_ arguments: Any?, result: @escaping FlutterResult) {
+        guard let dict = arguments as? [String: Any] else {
+            result(FlutterError(code: "BAD_ARGS", message: "Wrong argument types", details: nil))
+            return
+        }
+        
+        let server = SpeedTestServer(
+            ID: dict["id"] as? Int,
+            scheme: "https",
+            domain: dict["domain"] as? String,
+            downloadFolderPath: dict["downloadFolderPath"] as? String,
+            uploadFolderPath: dict["uploadFolderPath"] as? String,
+            uploadScript: "php",
+            countryCode: dict["countryCode"] as? String,
+            cityName: dict["city"] as? String
+        )
+        
+        self.server = server
+        result("Custom server set")
     }
     
     // MARK: - Helpers
@@ -58,7 +91,8 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         self.eventSink = events
         
         internetSpeedTest = InternetSpeedTest(delegate: self)
-        internetSpeedTest?.startTest() { (error) in
+        
+        let onTestStart: (SpeedcheckerSDK.SpeedTestError) -> Void = { (error) in
             if error != .ok {
                 self.sendErrorResult(error)
             } else {
@@ -79,6 +113,12 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
                 ]
                 self.eventSink?(self.resultDict)
             }
+        }
+        
+        if let server = server, !(server.domain ?? "").isEmpty {
+            internetSpeedTest?.start([server], completion: onTestStart)
+        } else {
+            internetSpeedTest?.startTest(onTestStart)
         }
         
         return nil
@@ -188,6 +228,12 @@ extension SpeedTestError: LocalizedError {
         @unknown default:
             return "Unknown"
         }
+    }
+}
+
+private extension SpeedCheckerPlugin {
+    enum Method: String {
+        case customServer
     }
 }
 
