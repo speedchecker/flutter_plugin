@@ -539,7 +539,9 @@ public enum SCTestStatus {
   @objc final public let ispName: Swift.String?
   @objc final public let date: Foundation.Date?
   @objc public var userCityName: Swift.String?
-  public static func create(withPlain date: Foundation.Date, latencyType: Swift.String?, latencyInMs: Swift.Int, jitter: Swift.Double, downloadInBps: Swift.Double, uploadInBps: Swift.Double, timeToFirstByteMs: Swift.Int, ipAddress: Swift.String?, ispName: Swift.String?, networkType: Swift.String?, serverID: Swift.Int, serverDomain: Swift.String?, serverCityName: Swift.String?, serverCountryCode: Swift.String?) -> SpeedcheckerSDK.SpeedTestResult
+  @objc final public let downloadTransferredMb: Swift.Double
+  @objc final public let uploadTransferredMb: Swift.Double
+  public static func create(withPlain date: Foundation.Date, latencyType: Swift.String?, latencyInMs: Swift.Int, jitter: Swift.Double, downloadInBps: Swift.Double, uploadInBps: Swift.Double, timeToFirstByteMs: Swift.Int, downloadTransferredMb: Swift.Double, uploadTransferredMb: Swift.Double, ipAddress: Swift.String?, ispName: Swift.String?, networkType: Swift.String?, serverID: Swift.Int, serverDomain: Swift.String?, serverCityName: Swift.String?, serverCountryCode: Swift.String?) -> SpeedcheckerSDK.SpeedTestResult
   @objc deinit
 }
 extension SpeedcheckerSDK.SpeedTestResult {

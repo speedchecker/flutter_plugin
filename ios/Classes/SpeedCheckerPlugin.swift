@@ -66,11 +66,16 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
                     "status": "Speed test started",
                     "server": "",
                     "ping": 0,
+                    "jitter": 0,
                     "downloadSpeed": 0,
                     "percent": 0,
                     "currentSpeed": 0,
                     "uploadSpeed": 0,
-                    "connectionType": ""
+                    "connectionType": "",
+                    "serverInfo": "",
+                    "deviceInfo": "",
+                    "downloadTransferredMb": 0,
+                    "uploadTransferredMb": 0
                 ]
                 self.eventSink?(self.resultDict)
             }
@@ -97,9 +102,14 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         resultDict["status"] = "Speed test finished"
         resultDict["server"] = result.server.domain
         resultDict["ping"] = result.latencyInMs
+        resultDict["jitter"] = result.jitter
         resultDict["downloadSpeed"] = result.downloadSpeed.mbps
         resultDict["uploadSpeed"] = result.uploadSpeed.mbps
         resultDict["connectionType"] = result.connectionType
+        resultDict["serverInfo"] = [result.server.cityName, result.server.country].compactMap({ $0 }).joined(separator: ", ")
+        resultDict["deviceInfo"] = result.deviceInfo
+        resultDict["downloadTransferredMb"] = result.downloadTransferredMb
+        resultDict["uploadTransferredMb"] = result.uploadTransferredMb
         sendResultDict()
     }
     
@@ -113,6 +123,7 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         print("Jitter: \(jitter)")
         resultDict["ping"] = latency
         resultDict["server"] = server.domain
+        resultDict["jitter"] = jitter
         sendResultDict()
     }
     

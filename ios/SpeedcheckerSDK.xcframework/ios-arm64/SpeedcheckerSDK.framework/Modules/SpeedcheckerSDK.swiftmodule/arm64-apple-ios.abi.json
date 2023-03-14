@@ -65911,9 +65911,111 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "downloadTransferredMb",
+            "printedName": "downloadTransferredMb",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@SpeedcheckerSDK@objc(cs)SpeedTestResult(py)downloadTransferredMb",
+            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC21downloadTransferredMbSdvp",
+            "moduleName": "SpeedcheckerSDK",
+            "declAttributes": [
+              "Final",
+              "HasStorage",
+              "AccessControl",
+              "ObjC",
+              "RawDocComment"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@SpeedcheckerSDK@objc(cs)SpeedTestResult(im)downloadTransferredMb",
+                "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC21downloadTransferredMbSdvg",
+                "moduleName": "SpeedcheckerSDK",
+                "implicit": true,
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "uploadTransferredMb",
+            "printedName": "uploadTransferredMb",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@SpeedcheckerSDK@objc(cs)SpeedTestResult(py)uploadTransferredMb",
+            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC19uploadTransferredMbSdvp",
+            "moduleName": "SpeedcheckerSDK",
+            "declAttributes": [
+              "Final",
+              "HasStorage",
+              "AccessControl",
+              "ObjC",
+              "RawDocComment"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@SpeedcheckerSDK@objc(cs)SpeedTestResult(im)uploadTransferredMb",
+                "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC19uploadTransferredMbSdvg",
+                "moduleName": "SpeedcheckerSDK",
+                "implicit": true,
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(network:server:latencyType:latencyInMs:jitter:downloadSpeed:uploadSpeed:timeToFirstByteMs:ipAddress:ispName:date:)",
+            "printedName": "init(network:server:latencyType:latencyInMs:jitter:downloadSpeed:uploadSpeed:timeToFirstByteMs:downloadTransferredMb:uploadTransferredMb:ipAddress:ispName:date:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -65971,6 +66073,18 @@
               },
               {
                 "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              },
+              {
+                "kind": "TypeNominal",
                 "name": "Optional",
                 "printedName": "Swift.String?",
                 "children": [
@@ -66013,8 +66127,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:15SpeedcheckerSDK15SpeedTestResultC7network6server11latencyType0H4InMs6jitter08downloadC006uploadC0015timeToFirstByteK09ipAddress7ispName4dateAcA0cD7NetworkC_AA0cD6ServerCAA0cd7LatencyI0OSiSdAA0cdC0CAVSiSSSgAW10Foundation4DateVSgtcfc",
-            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC7network6server11latencyType0H4InMs6jitter08downloadC006uploadC0015timeToFirstByteK09ipAddress7ispName4dateAcA0cD7NetworkC_AA0cD6ServerCAA0cd7LatencyI0OSiSdAA0cdC0CAVSiSSSgAW10Foundation4DateVSgtcfc",
+            "usr": "s:15SpeedcheckerSDK15SpeedTestResultC7network6server11latencyType0H4InMs6jitter08downloadC006uploadC0015timeToFirstByteK00M13TransferredMb0nsT09ipAddress7ispName4dateAcA0cD7NetworkC_AA0cD6ServerCAA0cd7LatencyI0OSiSdAA0cdC0CAXSiS2dSSSgAY10Foundation4DateVSgtcfc",
+            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC7network6server11latencyType0H4InMs6jitter08downloadC006uploadC0015timeToFirstByteK00M13TransferredMb0nsT09ipAddress7ispName4dateAcA0cD7NetworkC_AA0cD6ServerCAA0cd7LatencyI0OSiSdAA0cdC0CAXSiS2dSSSgAY10Foundation4DateVSgtcfc",
             "moduleName": "SpeedcheckerSDK",
             "declAttributes": [
               "RawDocComment"
@@ -66024,7 +66138,7 @@
           {
             "kind": "Function",
             "name": "create",
-            "printedName": "create(withPlain:latencyType:latencyInMs:jitter:downloadInBps:uploadInBps:timeToFirstByteMs:ipAddress:ispName:networkType:serverID:serverDomain:serverCityName:serverCountryCode:)",
+            "printedName": "create(withPlain:latencyType:latencyInMs:jitter:downloadInBps:uploadInBps:timeToFirstByteMs:downloadTransferredMb:uploadTransferredMb:ipAddress:ispName:networkType:serverID:serverDomain:serverCityName:serverCountryCode:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -66081,6 +66195,18 @@
                 "name": "Int",
                 "printedName": "Swift.Int",
                 "usr": "s:Si"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
               },
               {
                 "kind": "TypeNominal",
@@ -66174,8 +66300,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:15SpeedcheckerSDK15SpeedTestResultC6create9withPlain11latencyType0I4InMs6jitter08downloadK3Bps06uploadkO0015timeToFirstByteL09ipAddress7ispName07networkJ08serverID0Z6Domain0z4CityX00Z11CountryCodeAC10Foundation4DateV_SSSgSiS3dSiA3VSiA3VtFZ",
-            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC6create9withPlain11latencyType0I4InMs6jitter08downloadK3Bps06uploadkO0015timeToFirstByteL09ipAddress7ispName07networkJ08serverID0Z6Domain0z4CityX00Z11CountryCodeAC10Foundation4DateV_SSSgSiS3dSiA3VSiA3VtFZ",
+            "usr": "s:15SpeedcheckerSDK15SpeedTestResultC6create9withPlain11latencyType0I4InMs6jitter08downloadK3Bps06uploadkO0015timeToFirstByteL00N13TransferredMb0puV09ipAddress7ispName07networkJ08serverID12serverDomain010serverCityZ017serverCountryCodeAC10Foundation4DateV_SSSgSiS3dSiS2dA3XSiA3XtFZ",
+            "mangledName": "$s15SpeedcheckerSDK15SpeedTestResultC6create9withPlain11latencyType0I4InMs6jitter08downloadK3Bps06uploadkO0015timeToFirstByteL00N13TransferredMb0puV09ipAddress7ispName07networkJ08serverID12serverDomain010serverCityZ017serverCountryCodeAC10Foundation4DateV_SSSgSiS3dSiS2dA3XSiA3XtFZ",
             "moduleName": "SpeedcheckerSDK",
             "static": true,
             "declAttributes": [
@@ -93092,7 +93218,7 @@
       "kind": "StringLiteral",
       "offset": 996,
       "length": 8,
-      "value": "\"1.5.65\""
+      "value": "\"1.5.66\""
     },
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/Foundation\/SCLogger.swift",
@@ -93804,35 +93930,35 @@
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/InternetTest\/InternetSpeedTest.swift",
       "kind": "BooleanLiteral",
-      "offset": 21130,
+      "offset": 21286,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/InternetTest\/InternetSpeedTest.swift",
       "kind": "BooleanLiteral",
-      "offset": 21888,
+      "offset": 22044,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/InternetTest\/InternetSpeedTest.swift",
       "kind": "BooleanLiteral",
-      "offset": 25571,
+      "offset": 25727,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/InternetTest\/InternetSpeedTest.swift",
       "kind": "BooleanLiteral",
-      "offset": 26175,
+      "offset": 26331,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/predragbogdanic\/Documents\/Xcode Projects\/SpeedChecker.nosync\/SpeedcheckerReportSDK-swift. \/speedcheckerreportsdk-swift\/.build\/checkouts\/speedcheckersdk-swift\/Sources\/SpeedcheckerSDK\/InternetTest\/InternetSpeedTest.swift",
       "kind": "BooleanLiteral",
-      "offset": 27207,
+      "offset": 27363,
       "length": 5,
       "value": "false"
     },

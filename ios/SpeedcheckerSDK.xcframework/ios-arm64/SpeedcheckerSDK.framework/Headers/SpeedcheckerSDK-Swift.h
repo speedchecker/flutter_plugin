@@ -449,6 +449,10 @@ SWIFT_CLASS_NAMED("SpeedTestResult")
 @property (nonatomic, readonly, copy) NSString * _Nullable ispName;
 @property (nonatomic, readonly, copy) NSDate * _Nullable date;
 @property (nonatomic, copy) NSString * _Nullable userCityName;
+/// Data transferred during download. In MB (megabytes).
+@property (nonatomic, readonly) double downloadTransferredMb;
+/// Data transferred during upload. In MB (megabytes).
+@property (nonatomic, readonly) double uploadTransferredMb;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
