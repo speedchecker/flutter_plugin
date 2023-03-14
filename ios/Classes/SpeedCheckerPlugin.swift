@@ -60,9 +60,9 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         internetSpeedTest = InternetSpeedTest(delegate: self)
         internetSpeedTest?.startTest() { (error) in
             if error != .ok {
-                sendErrorResult(error)
+                self.sendErrorResult(error)
             } else {
-                resultDict = [
+                self.resultDict = [
                     "status": "Speed test started",
                     "server": "",
                     "ping": 0,
@@ -72,7 +72,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
                     "uploadSpeed": 0,
                     "connectionType": ""
                 ]
-                eventSink?(resultDict)
+                self.eventSink?(self.resultDict)
             }
         }
         
