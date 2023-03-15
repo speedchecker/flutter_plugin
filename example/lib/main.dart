@@ -54,6 +54,31 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void getCustomSpeedStats() {
+    _plugin.startSpeedTestWithCustomServer(
+        domain: 'dig20ny.speedcheckerapi.com',
+        downloadFolderPath: '\\/',
+        uploadFolderPath: '\\/',
+        city: 'New York 2',
+        country: 'USA',
+        countryCode: 'US',
+        id: 104
+    );
+
+    _plugin.speedTestResultStream.listen((result) {
+      setState(() {
+        _status = result.status;
+        _ping = result.ping;
+        _percent = result.percent;
+        _currentSpeed = result.currentSpeed;
+        _downloadSpeed = result.downloadSpeed;
+        _uploadSpeed = result.uploadSpeed;
+        _server = result.server;
+        _connectionType = result.connectionType;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -92,6 +117,18 @@ class _MyAppState extends State<MyApp> {
                         backgroundColor: const Color(SpeedMeter.mainRedColor),
                         textStyle: const TextStyle(fontSize: 16)),
                     child: const Text("Start Speed Test"),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      getCustomSpeedStats();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(SpeedMeter.mainRedColor),
+                        textStyle: const TextStyle(fontSize: 16)),
+                    child: const Text("Start Custom Speed Test"),
                   ),
                 ),
                 Container(

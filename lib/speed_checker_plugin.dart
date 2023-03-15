@@ -26,7 +26,8 @@ class SpeedCheckerPlugin {
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
+          downloadTransferredMb:
+              event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',
@@ -44,7 +45,8 @@ class SpeedCheckerPlugin {
       required String country,
       required String countryCode,
       required int id}) {
-    const MethodChannel('speedChecker_methodChannel').invokeMethod('customServer', {
+    const MethodChannel('speedChecker_methodChannel')
+        .invokeMethod('customServer', {
       'domain': domain,
       'downloadFolderPath': downloadFolderPath,
       'uploadFolderPath': uploadFolderPath,
