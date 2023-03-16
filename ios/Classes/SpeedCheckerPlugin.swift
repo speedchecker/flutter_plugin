@@ -85,6 +85,10 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         eventSink?(resultDict)
     }
     
+    private func resetServer() {
+        server = nil
+    }
+    
     // MARK: - FlutterStreamHandler
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
@@ -95,6 +99,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         let onTestStart: (SpeedcheckerSDK.SpeedTestError) -> Void = { (error) in
             if error != .ok {
                 self.sendErrorResult(error)
+                self.resetServer()
             } else {
                 self.resultDict = [
                     "status": "Speed test started",
@@ -126,6 +131,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         self.eventSink = nil
+        self.resetServer()
         return nil
     }
 }
@@ -133,6 +139,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
 extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
     public func internetTestError(error: SpeedTestError) {
         sendErrorResult(error)
+        resetServer()
     }
     
     public func internetTestFinish(result: SpeedTestResult) {
@@ -151,6 +158,7 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         resultDict["downloadTransferredMb"] = result.downloadTransferredMb
         resultDict["uploadTransferredMb"] = result.uploadTransferredMb
         sendResultDict()
+        resetServer()
     }
     
     public func internetTestReceived(servers: [SpeedTestServer]) {
