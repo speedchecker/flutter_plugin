@@ -31,13 +31,8 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 	private EventChannel.EventSink eventSink;
 	private final Map<String, Object> map = new HashMap<>();
 	private Context context;
-	private String domain = "";
-	private String downloadFolderPath = "";
-	private String uploadFolderPath = "";
-	private String city = "";
-	private String country = "";
-	private String countryCode = "";
-	private int id = 0;
+	private Server server = null;
+	private boolean isCustomServer = false;
 
 	@Override
 	public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -92,6 +87,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 						map.put("deviceInfo", speedTestResult.getDeviceInfo());
 						map.put("downloadTransferredMb", speedTestResult.getDownloadTransferredMb());
 						map.put("uploadTransferredMb", speedTestResult.getUploadTransferredMb());
+						isCustomServer = false;
 						eventSink.success(map);
 					}
 
@@ -158,12 +154,14 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 					@Override
 					public void onTestFatalError(String error) {
 						map.put("error", error);
+						isCustomServer = false;
 						eventSink.success(map);
 					}
 
 					@Override
 					public void onTestInterrupted(String s) {
 						map.put("error", s);
+						isCustomServer = false;
 						eventSink.success(map);
 					}
 				});
@@ -181,19 +179,23 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 		if (context != null) {
 			if (Build.VERSION.SDK_INT >= 30) {
 				if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-					Toast.makeText(context, "Please grant location permission", Toast.LENGTH_SHORT).show();
+					map.put("error", "Please grant location permission");
+					eventSink.success(map);
 				} else startTest(context);
 
 				if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
-					Toast.makeText(context, "Please grant background location permission", Toast.LENGTH_SHORT).show();
+					map.put("error", "Please grant background location permission");
+					eventSink.success(map);
 				} else startTest(context);
 
 			} else if (Build.VERSION.SDK_INT == 29) {
 				if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
-					Toast.makeText(context, "Please grant location permission", Toast.LENGTH_SHORT).show();
+					map.put("error", "Please grant location permission");
+					eventSink.success(map);
 				}
 			} else if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-				Toast.makeText(context, "Please grant location permission", Toast.LENGTH_SHORT).show();
+				map.put("error", "Please grant background location permission");
+				eventSink.success(map);
 			} else startTest(context);
 
 		}
@@ -201,19 +203,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 
 	private void startTest(Context context) {
 		SpeedcheckerSDK.init(context);
-		if (!domain.isEmpty() && !domain.equals("null")) {
-			Server server = new Server();
-			server.Domain = domain;
-			server.DownloadFolderPath = downloadFolderPath;
-			server.Id = id;
-			server.Scheme = "https";
-			server.Script = "php";
-			server.UploadFolderPath = uploadFolderPath;
-			server.Version = 3;
-			server.Location = server.new Location();
-			server.Location.City = city;
-			server.Location.Country = country;
-			server.Location.CountryCode = countryCode;
+		if (isCustomServer) {
 			SpeedcheckerSDK.SpeedTest.startTest(context, server);
 		} else SpeedcheckerSDK.SpeedTest.startTest(context);
 	}
@@ -225,13 +215,19 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 	@Override
 	public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
 		if (call.method.equals("customServer")) {
-			domain = call.argument("domain");
-			downloadFolderPath = call.argument("downloadFolderPath");
-			uploadFolderPath = call.argument("uploadFolderPath");
-			city = call.argument("city");
-			country = call.argument("country");
-			countryCode = call.argument("countryCode");
-			id = call.argument("id");
+			isCustomServer = true;
+			server = new Server();
+			server.Domain = call.argument("domain");
+			server.DownloadFolderPath = call.argument("downloadFolderPath");
+			server.Id = call.argument("id");
+			server.Scheme = "https";
+			server.Script = "php";
+			server.UploadFolderPath = call.argument("uploadFolderPath");
+			server.Version = 3;
+			server.Location = server.new Location();
+			server.Location.City = call.argument("city");
+			server.Location.Country = call.argument("country");
+			server.Location.CountryCode = call.argument("countryCode");
 			result.success("Custom server set");
 		} else {
 			result.notImplemented();

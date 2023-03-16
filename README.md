@@ -91,19 +91,28 @@ double _downloadSpeed = 0;
 double _uploadSpeed = 0;
 ```
 
-#### 2. Start 'startSpeedTest' method in your class. You can start this method on custom event, such as button click
+#### 2. Start 'startSpeedTest' method in your class.
+You can start this method on custom event, such as button click
 
 ```dart
 _plugin.startSpeedTest();
 ```
 
-#### 3. Plugin supports starting speed test with custom server. You can pass server domain as a String parameter to 'startSpeedTest' method
+Plugin supports starting speed test with custom server. You need to pass following server parameters to 'startSpeedTestWithCustomServer' method: domain, downloadFolderPath, uploadFolderPath, city, country, countryCode, id
 
 ```dart
-_plugin.startSpeedTestWithCustomServer('mydomain');
+_plugin.startSpeedTestWithCustomServer(
+  domain: 'dig20ny.speedcheckerapi.com',
+  downloadFolderPath: '\\/',
+  uploadFolderPath: '\\/',
+  city: 'New York 2',
+  country: 'USA',
+  countryCode: 'US',
+  id: 104
+);
 ```
 
-#### 4. Listen to 'speedTestResultStream'
+#### 3. Listen to 'speedTestResultStream'
 
 ```dart
 _plugin.speedTestResultStream.listen((result) {
@@ -118,7 +127,7 @@ _plugin.speedTestResultStream.listen((result) {
 });
 ```
 
-#### 5. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
+#### 4. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
 
 ```dart
 @override
