@@ -89,11 +89,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         server = nil
     }
     
-    // MARK: - FlutterStreamHandler
-    
-    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        self.eventSink = events
-        
+    private func startTest() {
         internetSpeedTest = InternetSpeedTest(delegate: self)
         
         let onTestStart: (SpeedcheckerSDK.SpeedTestError) -> Void = { (error) in
@@ -125,13 +121,31 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         } else {
             internetSpeedTest?.startTest(onTestStart)
         }
+    }
+    
+    private func checkPermissionsAndStartTest() {
+        SCLocationHelper().locationServicesEnabled { locationEnabled in
+            guard locationEnabled else {
+                self.sendErrorResult(.locationUndefined)
+                return
+            }
+            
+            self.startTest()
+        }
+    }
+    
+    // MARK: - FlutterStreamHandler
+    
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        self.eventSink = events
+        
+        checkPermissionsAndStartTest()
         
         return nil
     }
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         self.eventSink = nil
-        self.resetServer()
         return nil
     }
 }
