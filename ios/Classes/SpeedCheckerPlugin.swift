@@ -45,8 +45,8 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             ID: dict["id"] as? Int,
             scheme: "https",
             domain: dict["domain"] as? String,
-            downloadFolderPath: dict["downloadFolderPath"] as? String,
-            uploadFolderPath: dict["uploadFolderPath"] as? String,
+            downloadFolderPath: (dict["downloadFolderPath"] as? String)?.replacingOccurrences(of: "\\", with: ""),
+            uploadFolderPath: (dict["uploadFolderPath"] as? String)?.replacingOccurrences(of: "\\", with: ""),
             uploadScript: "php",
             countryCode: dict["countryCode"] as? String,
             cityName: dict["city"] as? String
