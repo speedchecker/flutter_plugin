@@ -17,7 +17,6 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         let channel = FlutterMethodChannel(name: "speedChecker_methodChannel", binaryMessenger: registrar.messenger())
         let instance = SpeedCheckerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
-        instance.requestLocation()
         instance.setupEventChannel(messanger: registrar.messenger())
     }
     
@@ -65,7 +64,6 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
                 self.locationManager.delegate = self
                 self.locationManager.requestWhenInUseAuthorization()
                 self.locationManager.requestAlwaysAuthorization()
-                self.locationManager.startUpdatingLocation()
             }
         }
     }
