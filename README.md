@@ -61,7 +61,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.0
+  speed_checker_plugin: ^1.0.5
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -103,8 +103,8 @@ Plugin supports starting speed test with custom server. You need to pass followi
 ```dart
 _plugin.startSpeedTestWithCustomServer(
   domain: 'dig20ny.speedcheckerapi.com',
-  downloadFolderPath: '\\/',
-  uploadFolderPath: '\\/',
+  downloadFolderPath: '/',
+  uploadFolderPath: '/',
   city: 'New York 2',
   country: 'USA',
   countryCode: 'US',

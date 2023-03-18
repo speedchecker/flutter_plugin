@@ -1,6 +1,6 @@
 name: speed_checker_plugin
 description: Flutter plugin for SpeedChecker SDK
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/speedchecker/flutter_plugin.git
 
 environment:

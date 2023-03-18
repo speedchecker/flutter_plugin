@@ -17,4 +17,8 @@
 ## 1.0.4
 
 * added more parameters to custom server test.
+* 
+## 1.0.5
+
+* fixed iOS custom server test.
 

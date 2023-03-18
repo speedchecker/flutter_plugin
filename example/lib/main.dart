@@ -57,8 +57,8 @@ class _MyAppState extends State<MyApp> {
   void getCustomSpeedStats() {
     _plugin.startSpeedTestWithCustomServer(
         domain: 'dig20ny.speedcheckerapi.com',
-        downloadFolderPath: '\\/',
-        uploadFolderPath: '\\/',
+        downloadFolderPath: '/',
+        uploadFolderPath: '/',
         city: 'New York 2',
         country: 'USA',
         countryCode: 'US',
