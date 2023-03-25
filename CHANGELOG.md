@@ -22,3 +22,8 @@
 
 * fixed iOS custom server test.
 
+## 1.0.6
+
+* added method to stop speed test.
+
+

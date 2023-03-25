@@ -2,14 +2,11 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class SpeedCheckerPlugin {
-  static const EventChannel _eventChannel =
-      EventChannel('speedChecker_eventChannel');
+  static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
+  static const MethodChannel _methodChannel = MethodChannel('speedChecker_methodChannel');
 
-  final _speedTestResultController =
-      StreamController<SpeedTestResult>.broadcast();
-
-  Stream<SpeedTestResult> get speedTestResultStream =>
-      _speedTestResultController.stream;
+  final _speedTestResultController = StreamController<SpeedTestResult>.broadcast();
+  Stream<SpeedTestResult> get speedTestResultStream => _speedTestResultController.stream;
 
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -26,8 +23,7 @@ class SpeedCheckerPlugin {
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb:
-              event['downloadTransferredMb']?.toDouble() ?? 0.0,
+          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',
@@ -35,6 +31,14 @@ class SpeedCheckerPlugin {
         _speedTestResultController.add(result);
       }
     });
+  }
+
+  void stopTest() {
+    _methodChannel.invokeMethod('stopTest');
+  }
+
+  void getIpInfo() {
+
   }
 
   void startSpeedTestWithCustomServer(
@@ -45,8 +49,7 @@ class SpeedCheckerPlugin {
       required String country,
       required String countryCode,
       required int id}) {
-    const MethodChannel('speedChecker_methodChannel')
-        .invokeMethod('customServer', {
+    _methodChannel.invokeMethod('customServer', {
       'domain': domain,
       'downloadFolderPath': downloadFolderPath,
       'uploadFolderPath': uploadFolderPath,
@@ -69,8 +72,7 @@ class SpeedCheckerPlugin {
           connectionType: event['connectionType']?.toString() ?? '',
           serverInfo: event['serverInfo']?.toString() ?? '',
           deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb:
-              event['downloadTransferredMb']?.toDouble() ?? 0.0,
+          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',

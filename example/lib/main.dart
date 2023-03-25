@@ -25,6 +25,8 @@ class _MyAppState extends State<MyApp> {
   int _percent = 0;
   double _downloadSpeed = 0;
   double _uploadSpeed = 0;
+  String _ip = '';
+  String _isp = '';
   final _plugin = SpeedCheckerPlugin();
 
   @override
@@ -50,6 +52,22 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
+      });
+    });
+  }
+
+  void stopTest() {
+    _plugin.stopTest();
+    _plugin.speedTestResultStream.listen((result) {
+      setState(() {
+        _status = result.status;
+        _ping = 0;
+        _percent = 0;
+        _currentSpeed = 0;
+        _downloadSpeed = 0;
+        _uploadSpeed = 0;
+        _server = '';
+        _connectionType = '';
       });
     });
   }
@@ -103,36 +121,47 @@ class _MyAppState extends State<MyApp> {
                             fontSize: 15,
                             color: Color(SpeedMeter.mainRedColor)))),
                 Container(
-                  margin: const EdgeInsets.only(top: 30, bottom: 50),
+                  margin: const EdgeInsets.only(top: 20, bottom: 50),
                   child: SpeedMeter(
                       currentSpeed: _currentSpeed, percent: _percent),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: ElevatedButton(
+                        onPressed: getSpeedStats,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(SpeedMeter.mainRedColor),
+                            textStyle: const TextStyle(fontSize: 16)),
+                        child: Text("start test".toUpperCase()),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: ElevatedButton(
+                        onPressed: getCustomSpeedStats,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(SpeedMeter.mainRedColor),
+                            textStyle: const TextStyle(fontSize: 16)),
+                        child: Text("start custom test".toUpperCase()),
+                      ),
+                    ),
+                  ],
+                ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      getSpeedStats();
-                    },
+                    onPressed: stopTest,
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(SpeedMeter.mainRedColor),
                         textStyle: const TextStyle(fontSize: 16)),
-                    child: const Text("Start Speed Test"),
+                    child: Text("stop test".toUpperCase()),
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      getCustomSpeedStats();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(SpeedMeter.mainRedColor),
-                        textStyle: const TextStyle(fontSize: 16)),
-                    child: const Text("Start Custom Speed Test"),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   child: Text('Speed test results'.toUpperCase(),
                       style: const TextStyle(
                           fontSize: 16,
@@ -144,7 +173,7 @@ class _MyAppState extends State<MyApp> {
                   margin: const EdgeInsets.only(left: 50),
                   child: Wrap(
                     direction: Axis.vertical,
-                    spacing: 10,
+                    spacing: 5,
                     children: [
                       Text(
                         'Server: $_server',
@@ -164,6 +193,14 @@ class _MyAppState extends State<MyApp> {
                       ),
                       Text(
                         'Connection Type: $_connectionType',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'User IP: $_ip',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'User ISP: $_isp',
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],

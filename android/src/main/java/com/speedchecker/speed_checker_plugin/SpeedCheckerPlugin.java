@@ -3,7 +3,6 @@ package com.speedchecker.speed_checker_plugin;
 
 import android.content.Context;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -173,6 +172,13 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 				eventSink = null;
 			}
 		});
+		//		SpeedcheckerSDK.SpeedTest.setAfterTestUserInfoListener((ip, isp) -> {
+//			HashMap<String, String> ipInfoMap = new HashMap<>();
+//			ipInfoMap.put("ip", ip);
+//			ipInfoMap.put("isp", isp);
+//			Log.i("map", ipInfoMap.toString());
+//			channel.invokeMethod("ipInfo", ipInfoMap);
+//		});
 	}
 
 	private void checkPermission(Context context) {
@@ -229,6 +235,10 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 			server.Location.Country = call.argument("country");
 			server.Location.CountryCode = call.argument("countryCode");
 			result.success("Custom server set");
+		} else if (call.method.equals("stopTest")) {
+			SpeedcheckerSDK.SpeedTest.interruptTest();
+			map.put("status", "Speed test stopped");
+			eventSink.success(map);
 		} else {
 			result.notImplemented();
 		}
