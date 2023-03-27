@@ -32,12 +32,21 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    getIpInfo();
   }
 
   @override
   void dispose() {
     _plugin.dispose();
     super.dispose();
+  }
+
+  Future<void> getIpInfo() async {
+    final ipInfo = await _plugin.getIpInfo();
+    setState(() {
+      _ip = ipInfo['ip']?.toString() ?? '';
+      _isp = ipInfo['isp']?.toString() ?? '';
+    });
   }
 
   void getSpeedStats() {

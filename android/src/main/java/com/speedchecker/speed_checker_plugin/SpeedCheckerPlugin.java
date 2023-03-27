@@ -172,13 +172,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 				eventSink = null;
 			}
 		});
-		//		SpeedcheckerSDK.SpeedTest.setAfterTestUserInfoListener((ip, isp) -> {
-//			HashMap<String, String> ipInfoMap = new HashMap<>();
-//			ipInfoMap.put("ip", ip);
-//			ipInfoMap.put("isp", isp);
-//			Log.i("map", ipInfoMap.toString());
-//			channel.invokeMethod("ipInfo", ipInfoMap);
-//		});
 	}
 
 	private void checkPermission(Context context) {
@@ -239,6 +232,13 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 			SpeedcheckerSDK.SpeedTest.interruptTest();
 			map.put("status", "Speed test stopped");
 			eventSink.success(map);
+		} else if (call.method.equals("ipInfo")) {
+			SpeedcheckerSDK.SpeedTest.setAfterTestUserInfoListener((ip, isp) -> {
+				HashMap<String, String> map = new HashMap<>();
+				map.put("ip", ip);
+				map.put("isp", isp);
+				result.success(map);
+			});
 		} else {
 			result.notImplemented();
 		}

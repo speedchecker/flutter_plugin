@@ -61,7 +61,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.6
+  speed_checker_plugin: ^1.0.7
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -89,6 +89,8 @@ double _currentSpeed = 0;
 int _percent = 0;
 double _downloadSpeed = 0;
 double _uploadSpeed = 0;
+String _ip = '';
+String _isp = '';
 ```
 
 #### 2. Start 'startSpeedTest' method in your class.
@@ -126,8 +128,39 @@ _plugin.speedTestResultStream.listen((result) {
   _connectionType = result.connectionType;
 });
 ```
+#### 4. If you need to stop speed test, you can call plugin's 'stopTest' method. It will immediately interrupt speed test. After stopping the test, you can update UI accordingly
 
-#### 4. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
+```dart
+  void stopTest() {
+    _plugin.stopTest();
+    _plugin.speedTestResultStream.listen((result) {
+      setState(() {
+        _status = result.status;
+        _ping = 0;
+        _percent = 0;
+        _currentSpeed = 0;
+        _downloadSpeed = 0;
+        _uploadSpeed = 0;
+        _server = '';
+        _connectionType = '';
+      });
+    });
+  }
+````
+
+#### 5. Plugin can return user IP address and Internet Service Provider (ISP) name. You can call 'getIpInfo' method to get this information. It will be returned as a Map<String, String> object after test completed. Please, note that after stopping test before completion, it will not return IP and ISP values.
+
+```dart
+  Future<void> getIpInfo() async {
+    final ipInfo = await _plugin.getIpInfo();
+    setState(() {
+      _ip = ipInfo['ip']?.toString() ?? '';
+      _isp = ipInfo['isp']?.toString() ?? '';
+    });
+  }
+```
+
+#### 6. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
 
 ```dart
 @override

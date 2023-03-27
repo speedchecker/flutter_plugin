@@ -37,9 +37,19 @@ class SpeedCheckerPlugin {
     _methodChannel.invokeMethod('stopTest');
   }
 
-  void getIpInfo() {
-
+  Future<Map<String, String>> getIpInfo() async {
+    try {
+      final Map<Object?, Object?> result = await _methodChannel.invokeMethod('ipInfo');
+      final Map<String, String> ipInfo = {
+        'ip': result['ip']?.toString() ?? '',
+        'isp': result['isp']?.toString() ?? '',
+      };
+      return ipInfo;
+    } on PlatformException catch (e) {
+      throw e.message.toString();
+    }
   }
+
 
   void startSpeedTestWithCustomServer(
       {required String domain,
