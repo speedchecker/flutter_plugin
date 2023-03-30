@@ -148,7 +148,7 @@ _plugin.speedTestResultStream.listen((result) {
   }
 ````
 
-#### 5. Plugin can return user IP address and Internet Service Provider (ISP) name. You can call 'getIpInfo' method to get this information. It will be returned as a Map<String, String> object after test completed. Please, note that after stopping test before completion, it will not return IP and ISP values.
+#### 5. Plugin can return user IP address and Internet Service Provider (ISP) name. You can call plugin's 'getIpInfo' method to get this information. It will be returned as a Map<String, String> object after test is completed. Please, note that after stopping the test before completion, it will not return IP and ISP values.
 
 ```dart
   Future<void> getIpInfo() async {

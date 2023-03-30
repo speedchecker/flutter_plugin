@@ -21,5 +21,8 @@
 * 
 ## 1.0.7
 * added user IP and ISP as a speed test parameters.
+* 
+## 1.0.8
+* added user IP and ISP in iOS.
 
 
