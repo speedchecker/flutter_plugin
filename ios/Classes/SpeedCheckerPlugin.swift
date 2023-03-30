@@ -31,6 +31,8 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         switch method {
         case .customServer:
             handleCustomServerMethod(call.arguments, result: result)
+        case .stopTest:
+            handleStopTestMethod(result: result)
         }
     }
     
@@ -53,6 +55,23 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         
         self.server = server
         result("Custom server set")
+    }
+    
+    private func handleStopTestMethod(result: @escaping FlutterResult) {
+        guard let internetSpeedTest = internetSpeedTest else {
+            result(nil)
+            return
+        }
+        
+        internetSpeedTest.forceFinish { [weak self] error in
+            if error != .ok {
+                result(FlutterError(code: "NATIVE_ERR", message: "Failed to stop test", details: "Error - \(error.rawValue)"))
+            } else {
+                result(nil)
+            }
+            self?.resultDict["status"] = "Speed test stopped"
+            self?.sendResultDict()
+        }
     }
     
     // MARK: - Helpers
@@ -254,6 +273,7 @@ extension SpeedTestError: LocalizedError {
 private extension SpeedCheckerPlugin {
     enum Method: String {
         case customServer
+        case stopTest
     }
 }
 
