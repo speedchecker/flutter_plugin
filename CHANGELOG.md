@@ -24,5 +24,8 @@
 * 
 ## 1.0.8
 * added user IP and ISP in iOS.
+* 
+## 1.0.9
+* changed example code for proper error handling.
 
 

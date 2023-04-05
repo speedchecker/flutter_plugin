@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -28,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   String _ip = '';
   String _isp = '';
   final _plugin = SpeedCheckerPlugin();
+  late StreamSubscription<SpeedTestResult> _subscription;
 
   @override
   void initState() {
@@ -51,7 +54,7 @@ class _MyAppState extends State<MyApp> {
 
   void getSpeedStats() {
     _plugin.startSpeedTest();
-    _plugin.speedTestResultStream.listen((result) {
+    _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
         _status = result.status;
         _ping = result.ping;
@@ -61,24 +64,26 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
+        if (result.status == 'Speed test stopped') {
+          _status = 'Speed test stopped';
+          _subscription.cancel();
+        } else if (result.error == 'Connection timeout. DOWNLOAD stage') {
+          _status = result.error.toString();
+          _subscription.cancel();
+        } else if (result.error == 'Connection timeout. UPLOAD stage') {
+          _status = result.error.toString();
+          _subscription.cancel();
+        }
       });
+    }, onDone: () {
+      _subscription.cancel();
+    }, onError: (error) {
+      _subscription.cancel();
     });
   }
 
   void stopTest() {
     _plugin.stopTest();
-    _plugin.speedTestResultStream.listen((result) {
-      setState(() {
-        _status = result.status;
-        _ping = 0;
-        _percent = 0;
-        _currentSpeed = 0;
-        _downloadSpeed = 0;
-        _uploadSpeed = 0;
-        _server = '';
-        _connectionType = '';
-      });
-    });
   }
 
   void getCustomSpeedStats() {
@@ -89,10 +94,9 @@ class _MyAppState extends State<MyApp> {
         city: 'New York 2',
         country: 'USA',
         countryCode: 'US',
-        id: 104
-    );
+        id: 104);
 
-    _plugin.speedTestResultStream.listen((result) {
+    _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
         _status = result.status;
         _ping = result.ping;
@@ -102,7 +106,21 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
+        if (result.status == 'Speed test stopped') {
+          _status = 'Speed test stopped';
+          _subscription.cancel();
+        } else if (result.error == 'Connection timeout. DOWNLOAD stage') {
+          _status = result.error.toString();
+          _subscription.cancel();
+        } else if (result.error == 'Connection timeout. UPLOAD stage') {
+          _status = result.error.toString();
+          _subscription.cancel();
+        }
       });
+    }, onDone: () {
+      _subscription.cancel();
+    }, onError: (error) {
+      _subscription.cancel();
     });
   }
 
@@ -126,13 +144,11 @@ class _MyAppState extends State<MyApp> {
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(_status,
-                        style: const TextStyle(
-                            fontSize: 15,
-                            color: Color(SpeedMeter.mainRedColor)))),
+                        style:
+                            const TextStyle(fontSize: 15, color: Color(SpeedMeter.mainRedColor)))),
                 Container(
                   margin: const EdgeInsets.only(top: 20, bottom: 50),
-                  child: SpeedMeter(
-                      currentSpeed: _currentSpeed, percent: _percent),
+                  child: SpeedMeter(currentSpeed: _currentSpeed, percent: _percent),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -258,9 +274,7 @@ class SpeedMeter extends StatelessWidget {
                       color: Color(mainRedColor))),
               const Text('Mbps',
                   style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color(blackTextColor))),
+                      fontSize: 15, fontWeight: FontWeight.bold, color: Color(blackTextColor))),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 child: Row(
@@ -305,13 +319,9 @@ class SpeedMeter extends StatelessWidget {
                       thickness: thickness,
                       edgeStyle: LinearEdgeStyle.bothCurve,
                       shaderCallback: (Rect bounds) {
-                        return const LinearGradient(colors: [
-                          Color(startProgressColor),
-                          Color(endProgressColor)
-                        ], stops: [
-                          0.0,
-                          1.0
-                        ]).createShader(bounds);
+                        return const LinearGradient(
+                            colors: [Color(startProgressColor), Color(endProgressColor)],
+                            stops: [0.0, 1.0]).createShader(bounds);
                       },
                     ),
                   ],
@@ -345,10 +355,7 @@ class SpeedMeter extends StatelessWidget {
                     sizeUnit: GaugeSizeUnit.logicalPixel,
                     enableAnimation: true,
                     gradient: const SweepGradient(
-                      colors: [
-                        Color(startProgressColor),
-                        Color(endProgressColor)
-                      ],
+                      colors: [Color(startProgressColor), Color(endProgressColor)],
                       stops: <double>[0.0, 1.0],
                     ),
                   ),
@@ -381,9 +388,7 @@ class SpeedMeter extends StatelessWidget {
                 endAngle: 360,
                 interval: 90,
                 majorTickStyle: MajorTickStyle(
-                    length: thickness / 2,
-                    thickness: thickness / 4,
-                    color: const Color(tickColor)),
+                    length: thickness / 2, thickness: thickness / 4, color: const Color(tickColor)),
                 minorTicksPerInterval: 8,
                 tickOffset: thickness * 0.7,
                 ticksPosition: ElementsPosition.outside,
