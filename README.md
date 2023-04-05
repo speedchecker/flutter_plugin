@@ -61,7 +61,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.7
+  speed_checker_plugin: ^1.0.9
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -77,10 +77,11 @@ Check out our [location policy](https://github.com/speedchecker/flutter_plugin/w
 
 ## Usage
 
-#### 1. Create an instance of 'SpeedCheckerPlugin' class and all variables you need to store speed test results
+#### 1. Create an instance of 'SpeedCheckerPlugin' class, StreamSubscription object to listen events from SpeedCheckerPlugin and all variables you need to store speed test results
 
 ```dart
 final _plugin = SpeedCheckerPlugin();
+late StreamSubscription<SpeedTestResult> _subscription;
 String _status = '';
 int _ping = 0;
 String _server = '';
@@ -114,7 +115,7 @@ _plugin.startSpeedTestWithCustomServer(
 );
 ```
 
-#### 3. Listen to 'speedTestResultStream'
+#### 3. Listen to 'speedTestResultStream'. You can also handle errors and update UI accordingly. Don't forget to cancel subscription after stopping the test or on receiving error
 
 ```dart
 _plugin.speedTestResultStream.listen((result) {
@@ -126,25 +127,23 @@ _plugin.speedTestResultStream.listen((result) {
   _uploadSpeed = result.uploadSpeed;
   _server = result.server;
   _connectionType = result.connectionType;
+  if (result.status == 'Speed test stopped') {
+    _status = 'Speed test stopped';
+    _subscription.cancel();
+  } else if (result.error == 'Connection timeout. DOWNLOAD stage') {
+    _status = result.error.toString();
+    _subscription.cancel();
+  } else if (result.error == 'Connection timeout. UPLOAD stage') {
+    _status = result.error.toString();
+    _subscription.cancel();
+  }
 });
 ```
-#### 4. If you need to stop speed test, you can call plugin's 'stopTest' method. It will immediately interrupt speed test. After stopping the test, you can update UI accordingly
+#### 4. If you need to stop speed test, you can call plugin's 'stopTest' method. It will immediately interrupt speed test
 
 ```dart
   void stopTest() {
     _plugin.stopTest();
-    _plugin.speedTestResultStream.listen((result) {
-      setState(() {
-        _status = result.status;
-        _ping = 0;
-        _percent = 0;
-        _currentSpeed = 0;
-        _downloadSpeed = 0;
-        _uploadSpeed = 0;
-        _server = '';
-        _connectionType = '';
-      });
-    });
   }
 ````
 
