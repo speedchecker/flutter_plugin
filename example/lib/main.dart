@@ -64,32 +64,37 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        if (result.status == 'Speed test stopped') {
-          _status = 'Speed test stopped';
-          _subscription.cancel();
-        } else if (result.error == 'Connection timeout. DOWNLOAD stage') {
-          _status = result.error.toString();
-          _subscription.cancel();
-        } else if (result.error == 'Connection timeout. UPLOAD stage') {
-          _status = result.error.toString();
-          _subscription.cancel();
-        }
       });
     }, onDone: () {
       _subscription.cancel();
     }, onError: (error) {
+      _status = error.toString();
       _subscription.cancel();
     });
   }
 
   void stopTest() {
     _plugin.stopTest();
+    _subscription = _plugin.speedTestResultStream.listen((result) {
+      setState(() {
+        _status = "Speed test stopped";
+        _ping = 0;
+        _percent = 0;
+        _currentSpeed = 0;
+        _downloadSpeed = 0;
+        _uploadSpeed = 0;
+        _server = '';
+        _connectionType = '';
+      });
+    }, onDone: () {
+      _subscription.cancel();
+    });
   }
 
   void getCustomSpeedStats() {
     _plugin.startSpeedTestWithCustomServer(
         domain: 'dig20ny.speedcheckerapi.com',
-        downloadFolderPath: '/',
+        downloadFolderPath: '/hbjbjbj',
         uploadFolderPath: '/',
         city: 'New York 2',
         country: 'USA',
@@ -106,20 +111,16 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        if (result.status == 'Speed test stopped') {
-          _status = 'Speed test stopped';
-          _subscription.cancel();
-        } else if (result.error == 'Connection timeout. DOWNLOAD stage') {
+        if (result.error == 'Connection timeout. DOWNLOAD stage') {
           _status = result.error.toString();
-          _subscription.cancel();
         } else if (result.error == 'Connection timeout. UPLOAD stage') {
           _status = result.error.toString();
-          _subscription.cancel();
         }
       });
     }, onDone: () {
       _subscription.cancel();
     }, onError: (error) {
+      _status = error.toString();
       _subscription.cancel();
     });
   }
