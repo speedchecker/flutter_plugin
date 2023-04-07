@@ -27,5 +27,8 @@
 * 
 ## 1.0.9
 * changed example code for proper error handling.
+* 
+## 1.0.10
+* more rework in error handling.
 
 
