@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    getIpInfo();
   }
 
   @override
@@ -53,6 +52,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getSpeedStats() {
+    getIpInfo();
     _plugin.startSpeedTest();
     _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
@@ -64,6 +64,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
+        _ip = '';
+        _isp = '';
       });
     }, onDone: () {
       _subscription.cancel();
@@ -71,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       _status = error.toString();
       _subscription.cancel();
     });
+
   }
 
   void stopTest() {
@@ -85,16 +88,21 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = 0;
         _server = '';
         _connectionType = '';
+        _ip = '';
+        _isp = '';
       });
     }, onDone: () {
       _subscription.cancel();
     });
+    _ip = '';
+    _isp = '';
   }
 
   void getCustomSpeedStats() {
+    getIpInfo();
     _plugin.startSpeedTestWithCustomServer(
         domain: 'dig20ny.speedcheckerapi.com',
-        downloadFolderPath: '/hbjbjbj',
+        downloadFolderPath: '/',
         uploadFolderPath: '/',
         city: 'New York 2',
         country: 'USA',
@@ -111,6 +119,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
+        _ip = '';
+        _isp = '';
         if (result.error == 'Connection timeout. DOWNLOAD stage') {
           _status = result.error.toString();
         } else if (result.error == 'Connection timeout. UPLOAD stage') {
