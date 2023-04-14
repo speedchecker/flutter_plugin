@@ -24,5 +24,7 @@
 * fixed getting ip and isp after test stop and restart
 * ## 1.0.12
 * fixed line endings in SDK .swiftinterface files in iOS
+* ## 1.0.13
+* another fix for line endings in SDK .swiftinterface files in iOS
 
 
