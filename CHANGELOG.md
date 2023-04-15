@@ -22,9 +22,11 @@
 * more rework in error handling.
 ## 1.0.11
 * fixed getting ip and isp after test stop and restart
-* ## 1.0.12
+## 1.0.12
 * fixed line endings in SDK .swiftinterface files in iOS
-* ## 1.0.13
+## 1.0.13
 * another fix for line endings in SDK .swiftinterface files in iOS
+## 1.0.14
+* changed iOS dependencies to CocoaPods
 
 

@@ -61,7 +61,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.13
+  speed_checker_plugin: ^1.0.14
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
