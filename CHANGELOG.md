@@ -28,5 +28,7 @@
 * another fix for line endings in SDK .swiftinterface files in iOS
 ## 1.0.14
 * changed iOS dependencies to CocoaPods
+## 1.0.15
+* updated gradle version to 7.4.2 in android
 
 
