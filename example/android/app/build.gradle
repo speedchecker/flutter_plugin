@@ -47,6 +47,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'com.speedchecker.speed_checker_plugin_example'
 }
 
 flutter {

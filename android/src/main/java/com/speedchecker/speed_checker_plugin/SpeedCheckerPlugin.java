@@ -232,7 +232,8 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 			SpeedcheckerSDK.SpeedTest.interruptTest();
 			map.put("status", "Speed test stopped");
 			eventSink.success(map);
-		} else if (call.method.equals("ipInfo")) {
+		}
+		else if (call.method.equals("ipInfo")) {
 			SpeedcheckerSDK.SpeedTest.setAfterTestUserInfoListener((ip, isp) -> {
 				HashMap<String, String> map = new HashMap<>();
 				map.put("ip", ip);
