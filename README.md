@@ -61,7 +61,10 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.15
+  speed_checker_plugin:
+    git:
+      url: https://github.com/speedchecker/flutter_plugin.git
+      ref: itpc
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -105,14 +108,13 @@ Plugin supports starting speed test with custom server. You need to pass followi
 
 ```dart
 _plugin.startSpeedTestWithCustomServer(
-  domain: 'dig20ny.speedcheckerapi.com',
-  downloadFolderPath: '/',
-  uploadFolderPath: '/',
-  city: 'New York 2',
-  country: 'USA',
-  countryCode: 'US',
-  id: 104
-);
+domain: 'itpc-iq.speedcheckerapi.com',
+downloadFolderPath: '/speedchecker/',
+uploadFolderPath: '/speedchecker/',
+city: 'Baghdad 1',
+country: 'Iraq',
+countryCode: 'BG',
+id: 2);
 ```
 
 #### 3. Listen to 'speedTestResultStream'. You can also handle errors and update UI accordingly. Don't forget to cancel subscription after stopping the test or on receiving error
@@ -128,8 +130,8 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
     _uploadSpeed = result.uploadSpeed;
     _server = result.server;
     _connectionType = result.connectionType;
-    _ip = '';
-    _isp = '';
+    _ip = result.ip;
+    _isp = result.isp;
     if (result.error == 'Connection timeout. DOWNLOAD stage') {
     _status = result.error.toString();
     } else if (result.error == 'Connection timeout. UPLOAD stage') {
@@ -169,18 +171,6 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
 
   }
 ````
-
-#### 5. Plugin can return user IP address and Internet Service Provider (ISP) name. You can call plugin's 'getIpInfo' method to get this information. It will be returned as a Map<String, String> object after test is completed. Please, note that after stopping the test before completion, it will not return IP and ISP values.
-
-```dart
-  Future<void> getIpInfo() async {
-    final ipInfo = await _plugin.getIpInfo();
-    setState(() {
-      _ip = ipInfo['ip']?.toString() ?? '';
-      _isp = ipInfo['isp']?.toString() ?? '';
-    });
-  }
-```
 
 #### 6. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
 
