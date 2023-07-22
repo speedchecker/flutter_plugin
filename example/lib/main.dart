@@ -89,13 +89,13 @@ class _MyAppState extends State<MyApp> {
 
   void getCustomSpeedStats() {
     _plugin.startSpeedTestWithCustomServer(
-        domain: 'dig20ny.speedcheckerapi.com',
-        downloadFolderPath: '/',
-        uploadFolderPath: '/',
-        city: 'New York 2',
-        country: 'USA',
-        countryCode: 'US',
-        id: 104);
+        domain: 'itpc-iq.speedcheckerapi.com',
+        downloadFolderPath: '/speedchecker/',
+        uploadFolderPath: '/speedchecker/',
+        city: 'Baghdad 1',
+        country: 'Iraq',
+        countryCode: 'BG',
+        id: 2);
 
     _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
