@@ -16,12 +16,12 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-
+        maven { url "https://jitpack.io" }
         maven {
-            url 'https://maven.speedcheckerapi.com/artifactory/libs-demo'
+            url 'https://maven.speedcheckerapi.com/artifactory/libs-release'
             credentials {
-                username = "demo"
-                password = "AP85qiz6wYEsCttWU2ZckEWSwJKuA6mSYcizEY"
+                username = "com.mocspeed.speed_test"
+                password = "AP57fcz95ua6njdpDhmnAaZAg2H6z7N97LskEX"
             }
         }
     }
@@ -38,11 +38,11 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
     }
 }
 
 dependencies {
-    implementation 'com.speedchecker:android-sdk:4.2.166-android-12-demo'
+    implementation 'com.speedchecker:android-sdk:4.2.215-no-permissions'
     implementation 'com.android.volley:volley:1.2.0'
 }

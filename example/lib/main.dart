@@ -43,16 +43,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  Future<void> getIpInfo() async {
-    final ipInfo = await _plugin.getIpInfo();
-    setState(() {
-      _ip = ipInfo['ip']?.toString() ?? '';
-      _isp = ipInfo['isp']?.toString() ?? '';
-    });
-  }
-
   void getSpeedStats() {
-    getIpInfo();
     _plugin.startSpeedTest();
     _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
@@ -64,8 +55,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        _ip = '';
-        _isp = '';
+        _ip = result.ip;
+        _isp = result.isp;
       });
     }, onDone: () {
       _subscription.cancel();
@@ -94,12 +85,9 @@ class _MyAppState extends State<MyApp> {
     }, onDone: () {
       _subscription.cancel();
     });
-    _ip = '';
-    _isp = '';
   }
 
   void getCustomSpeedStats() {
-    getIpInfo();
     _plugin.startSpeedTestWithCustomServer(
         domain: 'dig20ny.speedcheckerapi.com',
         downloadFolderPath: '/',
@@ -119,8 +107,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        _ip = '';
-        _isp = '';
+        _ip = result.ip;
+        _isp = result.isp;
         if (result.error == 'Connection timeout. DOWNLOAD stage') {
           _status = result.error.toString();
         } else if (result.error == 'Connection timeout. UPLOAD stage') {

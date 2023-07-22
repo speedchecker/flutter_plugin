@@ -28,15 +28,15 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 
 #### Android
 
-* minSdkVersion 19
+* minSdkVersion 21
 * Location permissions
 
-By default, flutter projects have minSdkVersion set to 16. You need to change this to 19. You can find this setting in build.gradle file: Your_project_folder/android/app/build.gradle
+By default, flutter projects have minSdkVersion set to 16. You need to change this to 21. You can find this setting in build.gradle file: Your_project_folder/android/app/build.gradle
 
 ```gradle
     defaultConfig {
     applicationId "com.example.test_project"
-        minSdkVersion flutter.minSdkVersion  //REPLACE "flutter.minSdkVersion" to 19 
+        minSdkVersion flutter.minSdkVersion  //REPLACE "flutter.minSdkVersion" to 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

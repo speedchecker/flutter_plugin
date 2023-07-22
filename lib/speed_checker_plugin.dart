@@ -27,6 +27,8 @@ class SpeedCheckerPlugin {
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',
+          ip: event['ip']?.toString() ?? '',
+          isp: event['isp']?.toString() ?? '',
         );
         _speedTestResultController.add(result);
       }
@@ -36,20 +38,6 @@ class SpeedCheckerPlugin {
   void stopTest() {
     _methodChannel.invokeMethod('stopTest');
   }
-
-  Future<Map<String, String>> getIpInfo() async {
-    try {
-      final Map<Object?, Object?> result = await _methodChannel.invokeMethod('ipInfo');
-      final Map<String, String> ipInfo = {
-        'ip': result['ip']?.toString() ?? '',
-        'isp': result['isp']?.toString() ?? '',
-      };
-      return ipInfo;
-    } on PlatformException catch (e) {
-      throw e.message.toString();
-    }
-  }
-
 
   void startSpeedTestWithCustomServer(
       {required String domain,
@@ -86,6 +74,8 @@ class SpeedCheckerPlugin {
           uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
           error: event['error']?.toString() ?? '',
           warning: event['warning']?.toString() ?? '',
+          ip: event['ip']?.toString() ?? '',
+          isp: event['isp']?.toString() ?? '',
         );
         _speedTestResultController.add(result);
       }
@@ -113,6 +103,8 @@ class SpeedTestResult {
   final double uploadTransferredMb;
   final String error;
   final String warning;
+  final String ip;
+  final String isp;
 
   SpeedTestResult({
     this.status = '',
@@ -130,6 +122,8 @@ class SpeedTestResult {
     this.uploadTransferredMb = 0.0,
     this.error = '',
     this.warning = '',
+    this.ip = '',
+    this.isp = '',
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
@@ -149,6 +143,8 @@ class SpeedTestResult {
       uploadTransferredMb: json['uploadTransferredMb']?.toDouble() ?? 0,
       error: json['error']?.toString() ?? "",
       warning: json['warning']?.toString() ?? "",
+      ip: json['ip']?.toString() ?? "",
+      isp: json['isp']?.toString() ?? "",
     );
   }
 }
