@@ -89,10 +89,19 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 						map.put("deviceInfo", speedTestResult.getDeviceInfo());
 						map.put("downloadTransferredMb", speedTestResult.getDownloadTransferredMb());
 						map.put("uploadTransferredMb", speedTestResult.getUploadTransferredMb());
-						map.put("ip", speedTestResult.UserIP);
-						map.put("isp", speedTestResult.UserISP);
+						if (isCustomServer){
+							SpeedcheckerSDK.SpeedTest.getBestServer(context, server -> {
+								map.put("ip", server.UserIP);
+								map.put("isp", server.UserISP);
+								eventSink.success(map);
+
+							});
+						} else {
+							map.put("ip", speedTestResult.UserIP);
+							map.put("isp", speedTestResult.UserISP);
+							eventSink.success(map);
+						}
 						isCustomServer = false;
-						eventSink.success(map);
 					}
 
 					@Override
@@ -169,7 +178,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 						eventSink.success(map);
 					}
 				});
-				checkPermission(context);
+				startTest(context);
 			}
 
 			@Override
@@ -178,28 +187,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 			}
 		});
 	}
-
-	private void checkPermission(Context context) {
-		if (context != null) {
-			if (Build.VERSION.SDK_INT >= 30) {
-				if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-					map.put("error", "Please grant location permission");
-					Toast.makeText(context, "Please grant location permission", Toast.LENGTH_SHORT).show();
-					eventSink.success(map);
-				} else {
-					startTest(context);
-				}
-			} else {
-				if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-					map.put("error", "Please grant location permission");
-					eventSink.success(map);
-				} else {
-					startTest(context);
-				}
-			}
-		}
-	}
-
 
 	private void startTest(Context context) {
 		SpeedcheckerSDK.init(context);
