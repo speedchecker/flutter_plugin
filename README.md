@@ -12,11 +12,11 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 ## Features
 
 * latency, download and upload speed of the user connection
-  * robust measuring of cellular, wireless and even local network
-  * testing details like the current speed and progress
-  * additional information like network type and location (see KPI list below in FAQ)
-  * included high-capacity servers provided and maintained by [Speedchecker](https://www.speedchecker.com) or custom servers
-  * detailed statistics and reports by Speedchecker
+* robust measuring of cellular, wireless and even local network
+* testing details like the current speed and progress
+* additional information like network type and location (see KPI list below in FAQ)
+* included high-capacity servers provided and maintained by [Speedchecker](https://www.speedchecker.com) or custom servers
+* detailed statistics and reports by Speedchecker
 
 ## Platform Support
 
@@ -29,7 +29,7 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 #### Android
 
 * minSdkVersion 21
-  * Location permissions
+* Location permissions
 
 By default, flutter projects have minSdkVersion set to 16. You need to change this to 21. You can find this setting in build.
 gradle file: Your_project_folder/android/app/build.gradle
@@ -47,8 +47,8 @@ gradle file: Your_project_folder/android/app/build.gradle
 #### iOS
 
 * Xcode 13.3.1 or later
-  * Swift 5
-  * Development Target 11.0 or later
+* Swift 5
+* Development Target 11.0 or later
 
 ## Installation
 
@@ -73,12 +73,12 @@ import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 
 ## Permission requirements
 
-Free version of the plugin requires location permission to be able to perform a speed test. You need to handle location 
-permission in your app level. When no location permission is given, the app will return in onError method the corresponding 
+Free version of the plugin requires location permission to be able to perform a speed test. You need to handle location
+permission in your app level. When no location permission is given, the app will return in onError method the corresponding
 message, so you need to request both Foreground and Background location permissions in your app before starting the speed test.
 Check out our [location policy](https://github.com/speedchecker/flutter_plugin/wiki/Privacy-&-consent)
 
-If you are a paid user, you should set license key before you start test. Please contact us and we will provide you with 
+If you are a paid user, you should set license key before you start test. Please contact us and we will provide you with
 licenseKey for your app.
 
 ## Usage
@@ -106,8 +106,8 @@ if you have a license key, you can add your key as a String value in the app:
 ```dart
 _plugin.setLicenseKey('your_license_key');
 ```
-License should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as 
-defined in your license 
+License should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as
+defined in your license
 agreement
 
 #### 3. Start 'startSpeedTest' method in your class.
