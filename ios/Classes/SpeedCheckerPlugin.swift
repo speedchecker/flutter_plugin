@@ -34,10 +34,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             handleCustomServerMethod(call.arguments, result: result)
         case .stopTest:
             handleStopTestMethod(result: result)
-        case .ipInfo:
-            ipInfoResult = result
-        }
-    }
+        }    }
     
     private func handleCustomServerMethod(_ arguments: Any?, result: @escaping FlutterResult) {
         guard let dict = arguments as? [String: Any] else {
@@ -105,11 +102,6 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         eventSink?(resultDict)
     }
     
-    private func sendIpInfoResult(ipAddress: String?, ispName: String?) {
-        let dict = ["ip": ipAddress, "isp": ispName]
-        ipInfoResult?(dict)
-    }
-    
     private func resetServer() {
         server = nil
     }
@@ -144,7 +136,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         if let server = server, !(server.domain ?? "").isEmpty {
             internetSpeedTest?.start([server], completion: onTestStart)
         } else {
-            internetSpeedTest?.startTest(onTestStart)
+            internetSpeedTest?.startFreeTest(onTestStart)
         }
     }
     
@@ -196,8 +188,9 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         resultDict["deviceInfo"] = result.deviceInfo
         resultDict["downloadTransferredMb"] = result.downloadTransferredMb
         resultDict["uploadTransferredMb"] = result.uploadTransferredMb
+        resultDict["ip"] = result.ipAddress
+        resultDict["isp"] = result.ispName
         sendResultDict()
-        sendIpInfoResult(ipAddress: result.ipAddress, ispName: result.ispName)
         resetServer()
     }
     
@@ -283,7 +276,5 @@ private extension SpeedCheckerPlugin {
     enum Method: String {
         case customServer
         case stopTest
-        case ipInfo
-    }
+   }
 }
-

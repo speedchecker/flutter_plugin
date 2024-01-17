@@ -43,16 +43,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  Future<void> getIpInfo() async {
-    final ipInfo = await _plugin.getIpInfo();
-    setState(() {
-      _ip = ipInfo['ip']?.toString() ?? '';
-      _isp = ipInfo['isp']?.toString() ?? '';
-    });
-  }
-
   void getSpeedStats() {
-    getIpInfo();
     _plugin.startSpeedTest();
     _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
@@ -64,8 +55,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        _ip = '';
-        _isp = '';
+        _ip = result.ip;
+        _isp = result.isp;
       });
     }, onDone: () {
       _subscription.cancel();
@@ -73,7 +64,6 @@ class _MyAppState extends State<MyApp> {
       _status = error.toString();
       _subscription.cancel();
     });
-
   }
 
   void stopTest() {
@@ -94,12 +84,9 @@ class _MyAppState extends State<MyApp> {
     }, onDone: () {
       _subscription.cancel();
     });
-    _ip = '';
-    _isp = '';
   }
 
   void getCustomSpeedStats() {
-    getIpInfo();
     _plugin.startSpeedTestWithCustomServer(
         domain: 'dig20ny.speedcheckerapi.com',
         downloadFolderPath: '/',
@@ -119,8 +106,8 @@ class _MyAppState extends State<MyApp> {
         _uploadSpeed = result.uploadSpeed;
         _server = result.server;
         _connectionType = result.connectionType;
-        _ip = '';
-        _isp = '';
+        _ip = result.ip;
+        _isp = result.isp;
         if (result.error == 'Connection timeout. DOWNLOAD stage') {
           _status = result.error.toString();
         } else if (result.error == 'Connection timeout. UPLOAD stage') {
@@ -171,7 +158,10 @@ class _MyAppState extends State<MyApp> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(SpeedMeter.mainRedColor),
                             textStyle: const TextStyle(fontSize: 16)),
-                        child: Text("start test".toUpperCase()),
+                        child: Text(
+                          "start test".toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                     Container(
@@ -181,7 +171,10 @@ class _MyAppState extends State<MyApp> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(SpeedMeter.mainRedColor),
                             textStyle: const TextStyle(fontSize: 16)),
-                        child: Text("start custom test".toUpperCase()),
+                        child: Text(
+                          "start custom test".toUpperCase(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
@@ -193,7 +186,10 @@ class _MyAppState extends State<MyApp> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(SpeedMeter.mainRedColor),
                         textStyle: const TextStyle(fontSize: 16)),
-                    child: Text("stop test".toUpperCase()),
+                    child: Text(
+                      "stop test".toUpperCase(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
                 Container(
@@ -279,7 +275,7 @@ class SpeedMeter extends StatelessWidget {
             children: [
               Text(currentSpeed.toStringAsFixed(2),
                   style: const TextStyle(
-                      fontSize: 40,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.8,
                       color: Color(mainRedColor))),

@@ -16,6 +16,7 @@
 	<string>speed_checker_plugin_example</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

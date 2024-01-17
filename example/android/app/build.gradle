@@ -35,8 +35,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.speedchecker.speed_checker_plugin_example"
-        minSdkVersion 19
+        applicationId "com.speedchecker.demo"
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

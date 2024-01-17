@@ -12,11 +12,11 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 ## Features
 
 * latency, download and upload speed of the user connection
-* robust measuring of cellular, wireless and even local network
-* testing details like the current speed and progress
-* additional information like network type and location (see KPI list below in FAQ)
-* included high-capacity servers provided and maintained by [Speedchecker](https://www.speedchecker.com) or custom servers
-* detailed statistics and reports by Speedchecker
+  * robust measuring of cellular, wireless and even local network
+  * testing details like the current speed and progress
+  * additional information like network type and location (see KPI list below in FAQ)
+  * included high-capacity servers provided and maintained by [Speedchecker](https://www.speedchecker.com) or custom servers
+  * detailed statistics and reports by Speedchecker
 
 ## Platform Support
 
@@ -28,15 +28,16 @@ about [SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-a
 
 #### Android
 
-* minSdkVersion 19
-* Location permissions
+* minSdkVersion 21
+  * Location permissions
 
-By default, flutter projects have minSdkVersion set to 16. You need to change this to 19. You can find this setting in build.gradle file: Your_project_folder/android/app/build.gradle
+By default, flutter projects have minSdkVersion set to 16. You need to change this to 21. You can find this setting in build.
+gradle file: Your_project_folder/android/app/build.gradle
 
 ```gradle
     defaultConfig {
     applicationId "com.example.test_project"
-        minSdkVersion flutter.minSdkVersion  //REPLACE "flutter.minSdkVersion" to 19 
+        minSdkVersion flutter.minSdkVersion  //REPLACE "flutter.minSdkVersion" to 21 
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -46,8 +47,8 @@ By default, flutter projects have minSdkVersion set to 16. You need to change th
 #### iOS
 
 * Xcode 13.3.1 or later
-* Swift 5
-* Development Target 11.0 or later
+  * Swift 5
+  * Development Target 11.0 or later
 
 ## Installation
 
@@ -61,7 +62,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.15
+  speed_checker_plugin: ^1.0.16
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -72,8 +73,13 @@ import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 
 ## Permission requirements
 
-Free version of the plugin requires location permission to be able to perform a speed test. You need to handle location permission in your app level.
+Free version of the plugin requires location permission to be able to perform a speed test. You need to handle location 
+permission in your app level. When no location permission is given, the app will return in onError method the corresponding 
+message, so you need to request both Foreground and Background location permissions in your app before starting the speed test.
 Check out our [location policy](https://github.com/speedchecker/flutter_plugin/wiki/Privacy-&-consent)
+
+If you are a paid user, you should set license key before you start test. Please contact us and we will provide you with 
+licenseKey for your app.
 
 ## Usage
 
@@ -94,7 +100,17 @@ String _ip = '';
 String _isp = '';
 ```
 
-#### 2. Start 'startSpeedTest' method in your class.
+#### 2. Set license key (for paid clients).
+if you have a license key, you can add your key as a String value in the app:
+
+```dart
+_plugin.setLicenseKey('your_license_key');
+```
+License should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as 
+defined in your license 
+agreement
+
+#### 3. Start 'startSpeedTest' method in your class.
 You can start this method on custom event, such as button click
 
 ```dart
@@ -115,7 +131,7 @@ _plugin.startSpeedTestWithCustomServer(
 );
 ```
 
-#### 3. Listen to 'speedTestResultStream'. You can also handle errors and update UI accordingly. Don't forget to cancel subscription after stopping the test or on receiving error
+#### 4. Listen to 'speedTestResultStream'. You can also handle errors and update UI accordingly. Don't forget to cancel subscription after stopping the test or on receiving error
 
 ```dart
 _subscription = _plugin.speedTestResultStream.listen((result) {
@@ -128,8 +144,8 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
     _uploadSpeed = result.uploadSpeed;
     _server = result.server;
     _connectionType = result.connectionType;
-    _ip = '';
-    _isp = '';
+    _ip = result.ip;
+    _isp = result.isp;
     if (result.error == 'Connection timeout. DOWNLOAD stage') {
     _status = result.error.toString();
     } else if (result.error == 'Connection timeout. UPLOAD stage') {
@@ -145,7 +161,7 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
 
 });
 ```
-#### 4. If you need to stop speed test, you can call plugin's 'stopTest' method. It will immediately interrupt speed test
+#### 5. If you need to stop speed test, you can call plugin's 'stopTest' method. It will immediately interrupt speed test
 
 ```dart
   void stopTest() {
@@ -169,18 +185,6 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
 
   }
 ````
-
-#### 5. Plugin can return user IP address and Internet Service Provider (ISP) name. You can call plugin's 'getIpInfo' method to get this information. It will be returned as a Map<String, String> object after test is completed. Please, note that after stopping the test before completion, it will not return IP and ISP values.
-
-```dart
-  Future<void> getIpInfo() async {
-    final ipInfo = await _plugin.getIpInfo();
-    setState(() {
-      _ip = ipInfo['ip']?.toString() ?? '';
-      _isp = ipInfo['isp']?.toString() ?? '';
-    });
-  }
-```
 
 #### 6. Do not forget to close the stream to prevent memory leaks. It can be done by overriding 'dispose' method
 
@@ -254,6 +258,6 @@ our [measurement methodology](https://docs.speedchecker.com/measurement-methodol
 Please contact us for more details and license requirements.
 
 * [More information about SpeedChecker SDKs](https://www.speedchecker.com/speed-test-tools/mobile-apps-and-sdks.html)
-* [API documentation](https://github.com/speedchecker/flutter_plugin/wiki/API-documentation)
-* [Buy license](https://www.speedchecker.com/contact-us.html)
-* [Contact us](https://www.speedchecker.com/contact-us.html)
+  * [API documentation](https://github.com/speedchecker/flutter_plugin/wiki/API-documentation)
+  * [Buy license](https://www.speedchecker.com/contact-us.html)
+  * [Contact us](https://www.speedchecker.com/contact-us.html)
