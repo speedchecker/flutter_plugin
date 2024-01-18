@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'dart:io';
 
 class SpeedCheckerPlugin {
   static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
@@ -39,8 +40,16 @@ class SpeedCheckerPlugin {
     _methodChannel.invokeMethod('stopTest');
   }
 
-  void setLicenseKey(String license) {
-    _methodChannel.invokeMethod('setLicenseKey', {'key': license});
+  void setAndroidLicenseKey(String license) {
+    if (Platform.isAndroid) {
+      _methodChannel.invokeMethod('setLicenseKey', {'androidKey': license});
+    }
+  }
+
+  void setIosLicenseKey(String license) {
+    if (Platform.isIOS) {
+      _methodChannel.invokeMethod('setLicenseKey', {'iosKey': license});
+    }
   }
 
   void startSpeedTestWithCustomServer(

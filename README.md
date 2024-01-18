@@ -104,9 +104,12 @@ String _isp = '';
 if you have a license key, you can add your key as a String value in the app:
 
 ```dart
-_plugin.setLicenseKey('your_license_key');
+_plugin.setAndroidLicenseKey('your_license_key');
 ```
-License should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as
+```dart
+_plugin.setIosLicenseKey('your_license_key');
+```
+Licenses should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as
 defined in your license
 agreement
 

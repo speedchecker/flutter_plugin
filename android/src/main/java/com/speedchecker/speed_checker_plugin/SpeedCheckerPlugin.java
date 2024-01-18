@@ -3,7 +3,6 @@ package com.speedchecker.speed_checker_plugin;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -254,7 +253,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 			map.put("status", "Speed test stopped");
 			eventSink.success(map);
 		} else if (call.method.equals("setLicenseKey")) {
-			licenseKey = call.argument("key");
+			licenseKey = call.argument("androidKey");
 		} else {
 			result.notImplemented();
 		}

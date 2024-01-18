@@ -12,17 +12,15 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     private var server: SpeedTestServer?
     
     private var resultDict = [String: Any]()
-    private var ipInfoResult: FlutterResult?
-    
+    private var iosLicenseKey: String?
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "speedChecker_methodChannel", binaryMessenger: registrar.messenger())
         let instance = SpeedCheckerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         instance.setupEventChannel(messanger: registrar.messenger())
     }
-    
-    // MARK: - Handle Flutter method calls
-    
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = Method(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
@@ -34,7 +32,20 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             handleCustomServerMethod(call.arguments, result: result)
         case .stopTest:
             handleStopTestMethod(result: result)
-        }    }
+        case .setIosLicenseKey:
+            handleSetIosLicenseKeyMethod(call.arguments, result: result)
+        }
+    }
+
+    private func handleSetIosLicenseKeyMethod(_ arguments: Any?, result: @escaping FlutterResult) {
+        guard let dict = arguments as? [String: Any], let iosKey = dict["iosKey"] as? String else {
+            result(FlutterError(code: "BAD_ARGS", message: "Wrong argument types", details: nil))
+            return
+        }
+        iosLicenseKey = iosKey
+        result("Ios license key set")
+    }
+
     
     private func handleCustomServerMethod(_ arguments: Any?, result: @escaping FlutterResult) {
         guard let dict = arguments as? [String: Any] else {
