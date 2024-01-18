@@ -62,7 +62,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.16
+  speed_checker_plugin: ^1.0.18
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -110,8 +110,7 @@ _plugin.setAndroidLicenseKey('your_license_key');
 _plugin.setIosLicenseKey('your_license_key');
 ```
 Licenses should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as
-defined in your license
-agreement
+defined in your license agreement. You can use both methods simultaneously if you have licenses for both platforms
 
 #### 3. Start 'startSpeedTest' method in your class.
 You can start this method on custom event, such as button click

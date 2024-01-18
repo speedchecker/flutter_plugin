@@ -35,6 +35,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    /**
+    Uncomment the method, for which platform you want to build a demo app. Put
+        in this methods your license for android or ios. You can use both
+        methods simultaneously if you have licenses for both platforms
+     */
+    // _plugin.setAndroidLicenseKey('your_android_licence_key');
+    // _plugin.setIosLicenseKey('your_ios_license_key');
   }
 
   @override
