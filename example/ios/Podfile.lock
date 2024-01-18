@@ -1,0 +1,36 @@
+PODS:
+  - Flutter (1.0.0)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - speed_checker_plugin (1.0.18):
+    - Flutter
+    - SpeedcheckerSDK (= 2.0.2)
+  - SpeedcheckerSDK (2.0.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - speed_checker_plugin (from `.symlinks/plugins/speed_checker_plugin/ios`)
+
+SPEC REPOS:
+  trunk:
+    - SpeedcheckerSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  speed_checker_plugin:
+    :path: ".symlinks/plugins/speed_checker_plugin/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  speed_checker_plugin: 1d7110a5be299fb5a8365f877a71481bd4572b90
+  SpeedcheckerSDK: f4ce6ce969acedf85652d1a615109ec527ed7406
+
+PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
+
+COCOAPODS: 1.14.3

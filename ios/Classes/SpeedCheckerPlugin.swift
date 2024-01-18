@@ -8,11 +8,11 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
     private var locationManager = CLLocationManager()
     private var internetSpeedTest: InternetSpeedTest?
+    private var licenseKey: String?
     
     private var server: SpeedTestServer?
     
     private var resultDict = [String: Any]()
-    private var iosLicenseKey: String?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "speedChecker_methodChannel", binaryMessenger: registrar.messenger())
@@ -20,6 +20,8 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         registrar.addMethodCallDelegate(instance, channel: channel)
         instance.setupEventChannel(messanger: registrar.messenger())
     }
+    
+    // MARK: - Handle Flutter method calls
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = Method(rawValue: call.method) else {
@@ -32,20 +34,10 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             handleCustomServerMethod(call.arguments, result: result)
         case .stopTest:
             handleStopTestMethod(result: result)
-        case .setIosLicenseKey:
-            handleSetIosLicenseKeyMethod(call.arguments, result: result)
+        case .setLicenseKey:
+            handleSetLicenseKeyMethod(call.arguments, result: result)
         }
     }
-
-    private func handleSetIosLicenseKeyMethod(_ arguments: Any?, result: @escaping FlutterResult) {
-        guard let dict = arguments as? [String: Any], let iosKey = dict["iosKey"] as? String else {
-            result(FlutterError(code: "BAD_ARGS", message: "Wrong argument types", details: nil))
-            return
-        }
-        iosLicenseKey = iosKey
-        result("Ios license key set")
-    }
-
     
     private func handleCustomServerMethod(_ arguments: Any?, result: @escaping FlutterResult) {
         guard let dict = arguments as? [String: Any] else {
@@ -85,6 +77,15 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         }
     }
     
+    private func handleSetLicenseKeyMethod(_ arguments: Any?, result: @escaping FlutterResult) {
+        guard let dict = arguments as? [String: Any], let licenseKey = dict["iosKey"] as? String else {
+            result(FlutterError(code: "BAD_ARGS", message: "Wrong argument types", details: nil))
+            return
+        }
+        self.licenseKey = licenseKey
+        result("iOS license key set")
+    }
+    
     // MARK: - Helpers
     
     fileprivate func requestLocation() {
@@ -118,7 +119,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     }
     
     private func startTest() {
-        internetSpeedTest = InternetSpeedTest(delegate: self)
+        internetSpeedTest = InternetSpeedTest(licenseKey: licenseKey, delegate: self)
         
         let onTestStart: (SpeedcheckerSDK.SpeedTestError) -> Void = { (error) in
             if error != .ok {
@@ -146,19 +147,10 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         
         if let server = server, !(server.domain ?? "").isEmpty {
             internetSpeedTest?.start([server], completion: onTestStart)
-        } else {
+        } else if (licenseKey ?? "").isEmpty {
             internetSpeedTest?.startFreeTest(onTestStart)
-        }
-    }
-    
-    private func checkPermissionsAndStartTest() {
-        SCLocationHelper().locationServicesEnabled { locationEnabled in
-            guard locationEnabled else {
-                self.sendErrorResult(.locationUndefined)
-                return
-            }
-            
-            self.startTest()
+        } else {
+            internetSpeedTest?.start(onTestStart)
         }
     }
     
@@ -167,7 +159,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         self.eventSink = events
         
-        checkPermissionsAndStartTest()
+        startTest()
         
         return nil
     }
@@ -277,6 +269,10 @@ extension SpeedTestError: LocalizedError {
             return "Cancelled"
         case .locationUndefined:
             return "Location undefined"
+        case .appISPMismatch:
+            return "App-ISP mismatch"
+        case .invalidlicenseKey:
+            return "Invalid license key"
         @unknown default:
             return "Unknown"
         }
@@ -287,5 +283,6 @@ private extension SpeedCheckerPlugin {
     enum Method: String {
         case customServer
         case stopTest
+        case setLicenseKey
    }
 }
