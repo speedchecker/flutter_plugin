@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:speed_checker_plugin/speed_checker_plugin.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +42,7 @@ class _MyAppState extends State<MyApp> {
         in this methods your license for android or ios. You can use both
         methods simultaneously if you have licenses for both platforms
      */
-    // _plugin.setAndroidLicenseKey('your_android_licence_key');
+    // _plugin.setAndroidLicenseKey('your_android_license_key');
     // _plugin.setIosLicenseKey('your_ios_license_key');
   }
 
@@ -65,6 +66,9 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
+        if(result.error.isNotEmpty) {
+          Fluttertoast.showToast(msg: result.error.toString());
+        }
       });
     }, onDone: () {
       _subscription.cancel();
@@ -116,10 +120,8 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
-        if (result.error == 'Connection timeout. DOWNLOAD stage') {
-          _status = result.error.toString();
-        } else if (result.error == 'Connection timeout. UPLOAD stage') {
-          _status = result.error.toString();
+        if(result.error.isNotEmpty) {
+          Fluttertoast.showToast(msg: result.error.toString());
         }
       });
     }, onDone: () {
