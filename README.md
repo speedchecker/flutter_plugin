@@ -62,7 +62,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.18
+  speed_checker_plugin: ^1.0.19
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.
@@ -148,10 +148,10 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
     _connectionType = result.connectionType;
     _ip = result.ip;
     _isp = result.isp;
-    if (result.error == 'Connection timeout. DOWNLOAD stage') {
-    _status = result.error.toString();
-    } else if (result.error == 'Connection timeout. UPLOAD stage') {
-    _status = result.error.toString();
+    
+    //if you want to show errors in toast messages, use the Fluttertoast library or you can handle errors in different way. 
+    if(result.error.isNotEmpty) {
+      Fluttertoast.showToast(msg: result.error.toString());
     }
 });
 }, onDone: () {
