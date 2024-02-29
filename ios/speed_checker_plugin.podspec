@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
 
   s.dependency 'Flutter'
-  s.dependency 'SpeedcheckerSDK', '2.0.2'
+  s.dependency 'SpeedcheckerSDK', '2.0.3'
 
   s.platform = :ios, '11.0'
 
