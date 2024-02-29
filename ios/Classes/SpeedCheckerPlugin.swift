@@ -11,6 +11,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     private var licenseKey: String?
     
     private var server: SpeedTestServer?
+    private var options: SpeedTestOptions?
     
     private var resultDict = [String: Any]()
 
@@ -32,6 +33,8 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         switch method {
         case .customServer:
             handleCustomServerMethod(call.arguments, result: result)
+        case .speedTestOptions:
+            handleSpeedTestOptions(call.arguments, result: result)
         case .stopTest:
             handleStopTestMethod(result: result)
         case .setLicenseKey:
@@ -58,6 +61,27 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         
         self.server = server
         result("Custom server set")
+    }
+    
+    private func handleSpeedTestOptions(_ arguments: Any?, result: @escaping FlutterResult) {
+        guard let dict = arguments as? [String: Any] else {
+            result(FlutterError(code: "BAD_ARGS", message: "Wrong argument types", details: nil))
+            return
+        }
+        
+        let defaultOptions = SpeedTestOptions()
+        let options = SpeedTestOptions(
+            downloadTimeMs: (dict["downloadTimeMs"] as? Int) ?? defaultOptions.downloadTimeMs,
+            uploadTimeMs: (dict["uploadTimeMs"] as? Int) ?? defaultOptions.uploadTimeMs,
+            downloadThreadsCount: (dict["downloadThreadsCount"] as? Int) ?? defaultOptions.downloadThreadsCount,
+            uploadThreadsCount: (dict["uploadThreadsCount"] as? Int) ?? defaultOptions.uploadThreadsCount,
+            additionalThreadsCount: (dict["additionalThreadsCount"] as? Int) ?? defaultOptions.additionalThreadsCount,
+            connectionTimeoutMs: (dict["connectionTimeoutMs"] as? Int) ?? defaultOptions.connectionTimeoutMs,
+            sendResultsToSpeedChecker: (dict["sendResultsToSpeedChecker"] as? Bool) ?? defaultOptions.sendResultsToSpeedChecker
+        )
+        
+        self.options = options
+        result("SpeedTestOptions set")
     }
     
     private func handleStopTestMethod(result: @escaping FlutterResult) {
@@ -114,17 +138,18 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         eventSink?(resultDict)
     }
     
-    private func resetServer() {
+    private func resetStartParameters() {
         server = nil
+        options = nil
     }
     
     private func startTest() {
         internetSpeedTest = InternetSpeedTest(licenseKey: licenseKey, delegate: self)
         
-        let onTestStart: (SpeedcheckerSDK.SpeedTestError) -> Void = { (error) in
-            if error != .ok {
+        let onTestStart: (SpeedcheckerSDK.SpeedTestError?) -> Void = { (error) in
+            if let error = error, error != .ok {
                 self.sendErrorResult(error)
-                self.resetServer()
+                self.resetStartParameters()
             } else {
                 self.resultDict = [
                     "status": "Speed test started",
@@ -145,12 +170,19 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             }
         }
         
-        if let server = server, !(server.domain ?? "").isEmpty {
+        switch (server, options) {
+        case (.some(let server), .some(let options)):
+            internetSpeedTest?.startWithOptions(options, servers: [server], onTestStart)
+        case (.some(let server), .none):
             internetSpeedTest?.start([server], completion: onTestStart)
-        } else if (licenseKey ?? "").isEmpty {
-            internetSpeedTest?.startFreeTest(onTestStart)
-        } else {
-            internetSpeedTest?.start(onTestStart)
+        case (.none, .some(let options)):
+            internetSpeedTest?.startWithOptions(options, onTestStart)
+        case (.none, .none):
+            if (licenseKey ?? "").isEmpty {
+                internetSpeedTest?.startFreeTest(onTestStart)
+            } else {
+                internetSpeedTest?.start(onTestStart)
+            }
         }
     }
     
@@ -173,7 +205,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
 extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
     public func internetTestError(error: SpeedTestError) {
         sendErrorResult(error)
-        resetServer()
+        resetStartParameters()
     }
     
     public func internetTestFinish(result: SpeedTestResult) {
@@ -194,7 +226,7 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         resultDict["ip"] = result.ipAddress
         resultDict["isp"] = result.ispName
         sendResultDict()
-        resetServer()
+        resetStartParameters()
     }
     
     public func internetTestReceived(servers: [SpeedTestServer]) {
@@ -282,6 +314,7 @@ extension SpeedTestError: LocalizedError {
 private extension SpeedCheckerPlugin {
     enum Method: String {
         case customServer
+        case speedTestOptions
         case stopTest
         case setLicenseKey
    }

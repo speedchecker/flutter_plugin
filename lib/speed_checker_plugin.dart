@@ -12,25 +12,38 @@ class SpeedCheckerPlugin {
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
-        final result = SpeedTestResult(
-          status: event['status']?.toString() ?? '',
-          ping: event['ping']?.toInt() ?? 0,
-          jitter: event['jitter']?.toInt() ?? 0,
-          percent: event['percent']?.toInt() ?? 0,
-          currentSpeed: event['currentSpeed']?.toDouble() ?? 0.0,
-          downloadSpeed: event['downloadSpeed']?.toDouble() ?? 0.0,
-          uploadSpeed: event['uploadSpeed']?.toDouble() ?? 0.0,
-          server: event['server']?.toString() ?? '',
-          connectionType: event['connectionType']?.toString() ?? '',
-          serverInfo: event['serverInfo']?.toString() ?? '',
-          deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
-          uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
-          error: event['error']?.toString() ?? '',
-          warning: event['warning']?.toString() ?? '',
-          ip: event['ip']?.toString() ?? '',
-          isp: event['isp']?.toString() ?? '',
-        );
+        final result = SpeedTestResult.fromJson(event);
+        _speedTestResultController.add(result);
+      }
+    });
+  }
+
+  void startSpeedTestWithOptions(SpeedTestOptions options) {
+    _methodChannel.invokeMethod('speedTestOptions', options.toMap());
+    _eventChannel.receiveBroadcastStream().listen((event) {
+      if (event is Map<Object?, dynamic>) {
+        final result = SpeedTestResult.fromJson(event);
+        _speedTestResultController.add(result);
+      }
+    });
+  }
+
+  void startSpeedTestWithServer(SpeedTestServer server) {
+    _methodChannel.invokeMethod('customServer', server.toMap());
+    _eventChannel.receiveBroadcastStream().listen((event) {
+      if (event is Map<Object?, dynamic>) {
+        final result = SpeedTestResult.fromJson(event);
+        _speedTestResultController.add(result);
+      }
+    });
+  }
+
+  void startSpeedTestWithOptionsAndServer(SpeedTestOptions options, SpeedTestServer server) {
+    _methodChannel.invokeMethod('speedTestOptions', options.toMap());
+    _methodChannel.invokeMethod('customServer', server.toMap());
+    _eventChannel.receiveBroadcastStream().listen((event) {
+      if (event is Map<Object?, dynamic>) {
+        final result = SpeedTestResult.fromJson(event);
         _speedTestResultController.add(result);
       }
     });
@@ -52,6 +65,7 @@ class SpeedCheckerPlugin {
     }
   }
 
+  @Deprecated('Use startSpeedTestWithServer instead')
   void startSpeedTestWithCustomServer(
       {required String domain,
       required String downloadFolderPath,
@@ -60,39 +74,16 @@ class SpeedCheckerPlugin {
       required String country,
       required String countryCode,
       required int id}) {
-    _methodChannel.invokeMethod('customServer', {
-      'domain': domain,
-      'downloadFolderPath': downloadFolderPath,
-      'uploadFolderPath': uploadFolderPath,
-      'city': city,
-      'country': country,
-      'countryCode': countryCode,
-      'id': id
-    });
-    _eventChannel.receiveBroadcastStream().listen((event) {
-      if (event is Map<Object?, dynamic>) {
-        final result = SpeedTestResult(
-          status: event['status']?.toString() ?? '',
-          ping: event['ping']?.toInt() ?? 0,
-          jitter: event['jitter']?.toInt() ?? 0,
-          percent: event['percent']?.toInt() ?? 0,
-          currentSpeed: event['currentSpeed']?.toDouble() ?? 0.0,
-          downloadSpeed: event['downloadSpeed']?.toDouble() ?? 0.0,
-          uploadSpeed: event['uploadSpeed']?.toDouble() ?? 0.0,
-          server: event['server']?.toString() ?? '',
-          connectionType: event['connectionType']?.toString() ?? '',
-          serverInfo: event['serverInfo']?.toString() ?? '',
-          deviceInfo: event['deviceInfo']?.toString() ?? '',
-          downloadTransferredMb: event['downloadTransferredMb']?.toDouble() ?? 0.0,
-          uploadTransferredMb: event['uploadTransferredMb']?.toDouble() ?? 0.0,
-          error: event['error']?.toString() ?? '',
-          warning: event['warning']?.toString() ?? '',
-          ip: event['ip']?.toString() ?? '',
-          isp: event['isp']?.toString() ?? '',
-        );
-        _speedTestResultController.add(result);
-      }
-    });
+    startSpeedTestWithServer(
+        SpeedTestServer(
+            domain: domain,
+            downloadFolderPath: downloadFolderPath,
+            uploadFolderPath: uploadFolderPath,
+            city: city,
+            country: country,
+            countryCode: countryCode,
+            id: id)
+    );
   }
 
   void dispose() {
@@ -141,23 +132,87 @@ class SpeedTestResult {
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
     return SpeedTestResult(
-      status: json['status']?.toString() ?? "",
+      status: json['status']?.toString() ?? '',
       ping: json['ping']?.toInt() ?? 0,
       jitter: json['jitter']?.toInt() ?? 0,
       percent: json['percent']?.toInt() ?? 0,
-      currentSpeed: json['currentSpeed']?.toDouble() ?? 0,
-      downloadSpeed: json['downloadSpeed']?.toDouble() ?? 0,
-      uploadSpeed: json['uploadSpeed']?.toDouble() ?? 0,
-      server: json['server']?.toString() ?? "",
-      connectionType: json['connectionType']?.toString() ?? "",
-      serverInfo: json['serverInfo']?.toString() ?? "",
-      deviceInfo: json['deviceInfo']?.toString() ?? "",
-      downloadTransferredMb: json['downloadTransferredMb']?.toDouble() ?? 0,
-      uploadTransferredMb: json['uploadTransferredMb']?.toDouble() ?? 0,
-      error: json['error']?.toString() ?? "",
-      warning: json['warning']?.toString() ?? "",
-      ip: json['ip']?.toString() ?? "",
-      isp: json['isp']?.toString() ?? "",
+      currentSpeed: json['currentSpeed']?.toDouble() ?? 0.0,
+      downloadSpeed: json['downloadSpeed']?.toDouble() ?? 0.0,
+      uploadSpeed: json['uploadSpeed']?.toDouble() ?? 0.0,
+      server: json['server']?.toString() ?? '',
+      connectionType: json['connectionType']?.toString() ?? '',
+      serverInfo: json['serverInfo']?.toString() ?? '',
+      deviceInfo: json['deviceInfo']?.toString() ?? '',
+      downloadTransferredMb: json['downloadTransferredMb']?.toDouble() ?? 0.0,
+      uploadTransferredMb: json['uploadTransferredMb']?.toDouble() ?? 0.0,
+      error: json['error']?.toString() ?? '',
+      warning: json['warning']?.toString() ?? '',
+      ip: json['ip']?.toString() ?? '',
+      isp: json['isp']?.toString() ?? '',
     );
+  }
+}
+
+class SpeedTestOptions {
+  final int? downloadTimeMs;
+  final int? uploadTimeMs;
+  final int? downloadThreadsCount;
+  final int? uploadThreadsCount;
+  final int? additionalThreadsCount;
+  final int? connectionTimeoutMs;
+  final bool? sendResultsToSpeedChecker;
+
+  const SpeedTestOptions({
+    this.downloadTimeMs,
+    this.uploadTimeMs,
+    this.downloadThreadsCount,
+    this.uploadThreadsCount,
+    this.additionalThreadsCount,
+    this.connectionTimeoutMs,
+    this.sendResultsToSpeedChecker,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'downloadTimeMs': downloadTimeMs,
+      'uploadTimeMs': uploadTimeMs,
+      'downloadThreadsCount': downloadThreadsCount,
+      'uploadThreadsCount': uploadThreadsCount,
+      'additionalThreadsCount': additionalThreadsCount,
+      'connectionTimeoutMs': connectionTimeoutMs,
+      'sendResultsToSpeedChecker': sendResultsToSpeedChecker,
+    };
+  }
+}
+
+class SpeedTestServer {
+  final String domain;
+  final String downloadFolderPath;
+  final String uploadFolderPath;
+  final String city;
+  final String country;
+  final String countryCode;
+  final int id;
+
+  const SpeedTestServer({
+    required this.domain,
+    required this.downloadFolderPath,
+    required this.uploadFolderPath,
+    required this.city,
+    required this.country,
+    required this.countryCode,
+    required this.id
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'domain': domain,
+      'downloadFolderPath': downloadFolderPath,
+      'uploadFolderPath': uploadFolderPath,
+      'city': city,
+      'country': country,
+      'countryCode': countryCode,
+      'id': id,
+    };
   }
 }
