@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     /**
-    Uncomment the method, for which platform you want to build a demo app. Put
+        Uncomment the method, for which platform you want to build a demo app. Put
         in this methods your license for android or ios. You can use both
         methods simultaneously if you have licenses for both platforms
      */
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
-        if(result.error.isNotEmpty) {
+        if (result.error.isNotEmpty) {
           Fluttertoast.showToast(msg: result.error.toString());
         }
       });
@@ -99,17 +99,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getCustomSpeedStats() {
-    _plugin.startSpeedTestWithServer(
-      const SpeedTestServer(
-          domain: 'dig20ny.speedcheckerapi.com',
-          downloadFolderPath: '/',
-          uploadFolderPath: '/',
-          city: 'New York 2',
-          country: 'USA',
-          countryCode: 'US',
-          id: 104
-      )
-    );
+    _plugin.startSpeedTestWithOptionsAndServer(
+        const SpeedTestOptions(sendResultsToSpeedChecker: true),
+        const SpeedTestServer(
+            domain: 'dig20ny.speedcheckerapi.com',
+            downloadFolderPath: '/',
+            uploadFolderPath: '/',
+            city: 'New York 2',
+            country: 'USA',
+            countryCode: 'US',
+            id: 104));
 
     _subscription = _plugin.speedTestResultStream.listen((result) {
       setState(() {
@@ -123,7 +122,7 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
-        if(result.error.isNotEmpty) {
+        if (result.error.isNotEmpty) {
           Fluttertoast.showToast(msg: result.error.toString());
         }
       });
@@ -155,11 +154,13 @@ class _MyAppState extends State<MyApp> {
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 20),
                     child: Text(_status,
-                        style:
-                            const TextStyle(fontSize: 15, color: Color(SpeedMeter.mainRedColor)))),
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Color(SpeedMeter.mainRedColor)))),
                 Container(
                   margin: const EdgeInsets.only(top: 20, bottom: 50),
-                  child: SpeedMeter(currentSpeed: _currentSpeed, percent: _percent),
+                  child: SpeedMeter(
+                      currentSpeed: _currentSpeed, percent: _percent),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -169,7 +170,8 @@ class _MyAppState extends State<MyApp> {
                       child: ElevatedButton(
                         onPressed: getSpeedStats,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(SpeedMeter.mainRedColor),
+                            backgroundColor:
+                                const Color(SpeedMeter.mainRedColor),
                             textStyle: const TextStyle(fontSize: 16)),
                         child: Text(
                           "start test".toUpperCase(),
@@ -182,7 +184,8 @@ class _MyAppState extends State<MyApp> {
                       child: ElevatedButton(
                         onPressed: getCustomSpeedStats,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(SpeedMeter.mainRedColor),
+                            backgroundColor:
+                                const Color(SpeedMeter.mainRedColor),
                             textStyle: const TextStyle(fontSize: 16)),
                         child: Text(
                           "start custom test".toUpperCase(),
@@ -294,7 +297,9 @@ class SpeedMeter extends StatelessWidget {
                       color: Color(mainRedColor))),
               const Text('Mbps',
                   style: TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.bold, color: Color(blackTextColor))),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Color(blackTextColor))),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 child: Row(
@@ -339,9 +344,13 @@ class SpeedMeter extends StatelessWidget {
                       thickness: thickness,
                       edgeStyle: LinearEdgeStyle.bothCurve,
                       shaderCallback: (Rect bounds) {
-                        return const LinearGradient(
-                            colors: [Color(startProgressColor), Color(endProgressColor)],
-                            stops: [0.0, 1.0]).createShader(bounds);
+                        return const LinearGradient(colors: [
+                          Color(startProgressColor),
+                          Color(endProgressColor)
+                        ], stops: [
+                          0.0,
+                          1.0
+                        ]).createShader(bounds);
                       },
                     ),
                   ],
@@ -375,7 +384,10 @@ class SpeedMeter extends StatelessWidget {
                     sizeUnit: GaugeSizeUnit.logicalPixel,
                     enableAnimation: true,
                     gradient: const SweepGradient(
-                      colors: [Color(startProgressColor), Color(endProgressColor)],
+                      colors: [
+                        Color(startProgressColor),
+                        Color(endProgressColor)
+                      ],
                       stops: <double>[0.0, 1.0],
                     ),
                   ),
@@ -408,7 +420,9 @@ class SpeedMeter extends StatelessWidget {
                 endAngle: 360,
                 interval: 90,
                 majorTickStyle: MajorTickStyle(
-                    length: thickness / 2, thickness: thickness / 4, color: const Color(tickColor)),
+                    length: thickness / 2,
+                    thickness: thickness / 4,
+                    color: const Color(tickColor)),
                 minorTicksPerInterval: 8,
                 tickOffset: thickness * 0.7,
                 ticksPosition: ElementsPosition.outside,
