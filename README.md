@@ -119,17 +119,19 @@ You can start this method on custom event, such as button click
 _plugin.startSpeedTest();
 ```
 
-Plugin supports starting speed test with custom server. You need to pass following server parameters to 'startSpeedTestWithCustomServer' method: domain, downloadFolderPath, uploadFolderPath, city, country, countryCode, id
+Plugin supports starting speed test with custom server 'startSpeedTestWithServer'.
 
 ```dart
-_plugin.startSpeedTestWithCustomServer(
-  domain: 'dig20ny.speedcheckerapi.com',
-  downloadFolderPath: '/',
-  uploadFolderPath: '/',
-  city: 'New York 2',
-  country: 'USA',
-  countryCode: 'US',
-  id: 104
+_plugin.startSpeedTestWithServer(
+  const SpeedTestServer(
+    domain: 'dig20ny.speedcheckerapi.com',
+    downloadFolderPath: '/',
+    uploadFolderPath: '/',
+    city: 'New York 2',
+    country: 'USA',
+    countryCode: 'US',
+    id: 104
+  )
 );
 ```
 
