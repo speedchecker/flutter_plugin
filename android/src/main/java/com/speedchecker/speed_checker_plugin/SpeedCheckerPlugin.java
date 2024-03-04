@@ -104,7 +104,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                             map.put("isp", speedTestResult.UserISP);
                             eventSink.success(map);
                         }
-                        isCustomServer = false;
+                        clearState();
                     }
 
                     @Override
@@ -158,7 +158,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                     @Override
                     public void onUploadTestFinished(double speedMbs) {
                         map.put("uploadSpeed", speedMbs);
-
                     }
 
                     @Override
@@ -170,14 +169,14 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                     @Override
                     public void onTestFatalError(String error) {
                         map.put("error", error);
-                        isCustomServer = false;
+                        clearState();
                         eventSink.success(map);
                     }
 
                     @Override
                     public void onTestInterrupted(String s) {
                         map.put("error", s);
-                        isCustomServer = false;
+                        clearState();
                         eventSink.success(map);
                     }
                 });
@@ -189,6 +188,12 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                 eventSink = null;
             }
         });
+    }
+
+    private void clearState() {
+        server = null;
+        isCustomServer = false;
+        speedTestOptions = null;
     }
 
     private void checkPermission(Context context) {
