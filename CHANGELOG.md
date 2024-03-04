@@ -30,5 +30,6 @@
 * changed iOS dependencies to CocoaPods
 ## 1.0.15
 * updated gradle version to 7.4.2 in android
-
+## 1.0.20
+* Added support for starting test with SpeedTestOptions and SpeedTestServer.
 
