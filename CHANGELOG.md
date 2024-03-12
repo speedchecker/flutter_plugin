@@ -32,4 +32,6 @@
 * updated gradle version to 7.4.2 in android
 ## 1.0.20
 * Added support for starting test with SpeedTestOptions and SpeedTestServer.
+## 1.0.21
+* Resolved iOS crash.
 

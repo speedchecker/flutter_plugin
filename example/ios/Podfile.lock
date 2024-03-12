@@ -6,7 +6,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - speed_checker_plugin (1.0.19):
+  - speed_checker_plugin (1.0.21):
     - Flutter
     - SpeedcheckerSDK (= 2.0.3)
   - SpeedcheckerSDK (2.0.3)
@@ -34,13 +34,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/speed_checker_plugin/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  speed_checker_plugin: 1d33ecad96c4a390f396324cc16bfd4c613fee67
+  speed_checker_plugin: 24e7547c8b02bb2b7ac58a5307de5af3f886cf69
   SpeedcheckerSDK: a58ef91c841db1f4a5ef906f501ddc4bf267ee54
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

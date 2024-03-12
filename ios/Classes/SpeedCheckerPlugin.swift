@@ -11,7 +11,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     private var licenseKey: String?
     
     private var server: SpeedTestServer?
-    private var options: SpeedTestOptions?
+    private var options: Any?
     
     private var resultDict = [String: Any]()
 
@@ -131,11 +131,16 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
     private func sendErrorResult(_ error: SpeedTestError) {
         print(error.localizedDescription)
-        eventSink?(["error": error.localizedDescription])
+        DispatchQueue.main.async { [weak self] in
+            self?.eventSink?(["error": error.localizedDescription])
+        }
     }
     
     private func sendResultDict() {
-        eventSink?(resultDict)
+        let resultDict = self.resultDict
+        DispatchQueue.main.async { [weak self] in
+            self?.eventSink?(resultDict)
+        }
     }
     
     private func resetStartParameters() {
@@ -170,7 +175,7 @@ public class SpeedCheckerPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             }
         }
         
-        switch (server, options) {
+        switch (server, options as? SpeedTestOptions) {
         case (.some(let server), .some(let options)):
             internetSpeedTest?.startWithOptions(options, servers: [server], onTestStart)
         case (.some(let server), .none):
