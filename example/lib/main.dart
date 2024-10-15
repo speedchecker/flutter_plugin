@@ -38,11 +38,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     /**
-        Uncomment the method, for which platform you want to build a demo app. Put
-        in this methods your license for android or ios. You can use both
-        methods simultaneously if you have licenses for both platforms
+        For iOS platform you can use this method to setup licenseKey
+        For Android licenseKey should be setup in onCreate Application method.
      */
-    // _plugin.setAndroidLicenseKey('your_android_license_key');
     // _plugin.setIosLicenseKey('your_ios_license_key');
   }
 

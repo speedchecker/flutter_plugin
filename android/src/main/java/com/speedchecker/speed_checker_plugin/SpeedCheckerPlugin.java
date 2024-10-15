@@ -34,7 +34,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
     private Context context;
     private Server server = null;
     private boolean isCustomServer = false;
-    private String licenseKey = "";
     private SpeedTestOptions speedTestOptions = null;
 
     @Override
@@ -198,37 +197,12 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 
     private void checkPermission(Context context) {
         if (context != null) {
-            if (licenseKey.isEmpty()) {
-                if (Build.VERSION.SDK_INT >= 30) {
-                    if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 ||
-                            ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-                        map.put("error", "Please grant location permission");
-                        eventSink.success(map);
-                    } else if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
-                        map.put("error", "Please grant background location permission");
-                        eventSink.success(map);
-                    } else {
-                        startTest(context);
-                    }
-                } else if (Build.VERSION.SDK_INT == 29) {
-                    if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
-                        map.put("error", "Please grant location permission");
-                        eventSink.success(map);
-                    }
-                } else if (ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_COARSE_LOCATION") != 0 || ActivityCompat.checkSelfPermission(context, "android.permission.ACCESS_FINE_LOCATION") != 0) {
-                    map.put("error", "Please grant background location permission");
-                    eventSink.success(map);
-                }
-            } else startTest(context);
+            startTest(context);
         }
     }
 
     private void startTest(Context context) {
-        if (licenseKey.isEmpty()) {
-            SpeedcheckerSDK.init(context);
-        } else {
-            SpeedcheckerSDK.init(context, licenseKey);
-        }
+        SpeedcheckerSDK.init(context);
         if (speedTestOptions != null) {
             SpeedcheckerSDK.SpeedTest.startTest(context, server, speedTestOptions);
         } else {
@@ -263,8 +237,6 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
             SpeedcheckerSDK.SpeedTest.interruptTest();
             map.put("status", "Speed test stopped");
             eventSink.success(map);
-        } else if (call.method.equals("setLicenseKey")) {
-            licenseKey = call.argument("androidKey");
         } else if (call.method.equals("speedTestOptions")) {
             speedTestOptions = new SpeedTestOptions();
             speedTestOptions.setSendResultsToSpeedChecker(Boolean.TRUE.equals(call.argument("sendResultsToSpeedChecker")));
