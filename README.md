@@ -105,7 +105,7 @@ if you have a license key, you can add your key as a String value in the app:
 ```dart
 _plugin.setIosLicenseKey('your_license_key');
 ```
-For Android licenseKey should be setup in Applications onCreate method in native flutter project code.
+For Android licenseKey should be setup in Application onCreate method in native flutter project code.
 <pre>
 class MainApplication : Application() {
     override fun onCreate() {
