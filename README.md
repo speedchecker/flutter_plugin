@@ -208,7 +208,7 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
 
 ## Demo application
 
-Please check our [demo application]([https://github.com/speedchecker/flutter_plugin](https://github.com/speedchecker/flutter_plugin/tree/main/example)) in Flutter which includes speed test functionality as well as
+Please check our [demo application](https://github.com/speedchecker/flutter_plugin/tree/main/example) in Flutter which includes speed test functionality as well as
 speedometer UI.
 
 ## License
