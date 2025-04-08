@@ -10,10 +10,13 @@ import com.speedchecker.android.sdk.Public.SpeedTestListener;
 import com.speedchecker.android.sdk.Public.SpeedTestOptions;
 import com.speedchecker.android.sdk.Public.SpeedTestResult;
 import com.speedchecker.android.sdk.SpeedcheckerSDK;
+import com.speedchecker.android.sdk.Public.Model.SCellInfo; // Updated import path
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.EventChannel;
@@ -40,6 +43,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+
         Log.d(TAG, "onAttachedToEngine");
         contextRef = new WeakReference<>(flutterPluginBinding.getApplicationContext());
 
@@ -258,8 +262,76 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                     // Get IP and ISP information
                     map.put("ip", speedTestResult.UserIP != null ? speedTestResult.UserIP : "");
                     map.put("isp", speedTestResult.UserISP != null ? speedTestResult.UserISP : "");
-                    sendEvent();
+                    
+                    // Add cellular information if available
+                    try {
+                        List<SCellInfo> cellInfoList = speedTestResult.getsCellInfoList();
+                        if (cellInfoList != null && !cellInfoList.isEmpty()) {
+                            List<Map<String, Object>> cellMapList = new ArrayList<>();
+                            
+                            for (SCellInfo cellInfo : cellInfoList) {
+                                Map<String, Object> cellMap = new HashMap<>();
+                                
+                                cellMap.put("cellId", cellInfo.getCellId());
+                                // eNodeB ID calculation (first 28 bits of the cell ID for LTE)
+                                long cellId = cellInfo.getCellId();
+                                cellMap.put("enb", cellId >> 8);
+                                
+                                // Use the exact method names from the SCellInfo class
+                                try { cellMap.put("pci", cellInfo.getLtePci()); } catch (Exception e) { }
+                                try { cellMap.put("tac", cellInfo.getTAC()); } catch (Exception e) { }
+                                try { cellMap.put("lac", cellInfo.getLAC()); } catch (Exception e) { }
+                                try { cellMap.put("mcc", cellInfo.getMCC()); } catch (Exception e) { }
+                                try { cellMap.put("mnc", cellInfo.getMNC()); } catch (Exception e) { }
+                                try { cellMap.put("channelNumber", cellInfo.getChannelNumber()); } catch (Exception e) { }
+                                try { cellMap.put("type", cellInfo.getType()); } catch (Exception e) { }
+                                try { cellMap.put("isFromDataSim", cellInfo.isFromDataSim()); } catch (Exception e) { }
+                                try { cellMap.put("isFromCallSim", cellInfo.isFromCallSim()); } catch (Exception e) { }
+                                
+                                // LTE signal metrics
+                                try { cellMap.put("lteRsrp", cellInfo.getLteRSRP()); } catch (Exception e) { }
+                                try { cellMap.put("lteRsrq", cellInfo.getLteRSRQ()); } catch (Exception e) { }
+                                try { cellMap.put("lteSinr", cellInfo.getLteRSSNR()); } catch (Exception e) { }
+                                try { cellMap.put("lteCqi", cellInfo.getLteCQI()); } catch (Exception e) { }
+                                try { cellMap.put("lteRssi", cellInfo.getLteRssi()); } catch (Exception e) { }
+                                try { cellMap.put("lteTimingAdvance", cellInfo.getLteTimingAdvance()); } catch (Exception e) { }
+                                
+                                // 5G signal metrics
+                                try { cellMap.put("nrRsrp", cellInfo.getNrRSRP()); } catch (Exception e) { }
+                                try { cellMap.put("nrRsrq", cellInfo.getNrRSRQ()); } catch (Exception e) { }
+                                try { cellMap.put("nrSinr", cellInfo.getNrSINR()); } catch (Exception e) { }
+                                
+                                // 2G/3G signal metrics
+                                try { cellMap.put("gsmRssi", cellInfo.getGsmRSSI()); } catch (Exception e) { }
+                                try { cellMap.put("gsmBer", cellInfo.getGsmBer()); } catch (Exception e) { }
+                                try { cellMap.put("wcdmaRscp", cellInfo.getWcdmaRSCP()); } catch (Exception e) { }
+                                try { cellMap.put("wcdmaPsc", cellInfo.getWcdmaPsc()); } catch (Exception e) { }
+                                try { cellMap.put("wcdmaEcNo", cellInfo.getWcdmaEcNo()); } catch (Exception e) { }
+                                
+                                // Additional information
+                                try { cellMap.put("isRoaming", cellInfo.isRoaming()); } catch (Exception e) { }
+                                try { 
+                                    int[] bandwidths = cellInfo.getCellBandwidths();
+                                    if (bandwidths != null) {
+                                        cellMap.put("cellBandwidths", bandwidths);
+                                    }
+                                } catch (Exception e) { }
+                                
+                                try { cellMap.put("networkOperator", cellInfo.getNetworkOperator()); } catch (Exception e) { }
+                                try { cellMap.put("networkOperatorName", cellInfo.getNetworkOperatorName()); } catch (Exception e) { }
+                                try { cellMap.put("simOperator", cellInfo.getSimOperator()); } catch (Exception e) { }
+                                try { cellMap.put("simOperatorName", cellInfo.getSimOperatorName()); } catch (Exception e) { }
+                                
+                                cellMapList.add(cellMap);
+                            }
+                            
+                            map.put("cellInfoList", cellMapList);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing cell info", e);
+                    }
                 }
+                sendEvent();
                 clearState();
             }
 

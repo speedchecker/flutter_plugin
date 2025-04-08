@@ -3,11 +3,17 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 
 class SpeedCheckerPlugin {
-  static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
-  static const MethodChannel _methodChannel = MethodChannel('speedChecker_methodChannel');
+  static const EventChannel _eventChannel = EventChannel(
+    'speedChecker_eventChannel',
+  );
+  static const MethodChannel _methodChannel = MethodChannel(
+    'speedChecker_methodChannel',
+  );
 
-  final _speedTestResultController = StreamController<SpeedTestResult>.broadcast();
-  Stream<SpeedTestResult> get speedTestResultStream => _speedTestResultController.stream;
+  final _speedTestResultController =
+      StreamController<SpeedTestResult>.broadcast();
+  Stream<SpeedTestResult> get speedTestResultStream =>
+      _speedTestResultController.stream;
 
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -38,7 +44,10 @@ class SpeedCheckerPlugin {
     });
   }
 
-  void startSpeedTestWithOptionsAndServer(SpeedTestOptions options, SpeedTestServer server) {
+  void startSpeedTestWithOptionsAndServer(
+    SpeedTestOptions options,
+    SpeedTestServer server,
+  ) {
     _methodChannel.invokeMethod('speedTestOptions', options.toMap());
     _methodChannel.invokeMethod('customServer', server.toMap());
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -66,28 +75,101 @@ class SpeedCheckerPlugin {
   }
 
   @Deprecated('Use startSpeedTestWithServer instead')
-  void startSpeedTestWithCustomServer(
-      {required String domain,
-      required String downloadFolderPath,
-      required String uploadFolderPath,
-      required String city,
-      required String country,
-      required String countryCode,
-      required int id}) {
+  void startSpeedTestWithCustomServer({
+    required String domain,
+    required String downloadFolderPath,
+    required String uploadFolderPath,
+    required String city,
+    required String country,
+    required String countryCode,
+    required int id,
+  }) {
     startSpeedTestWithServer(
-        SpeedTestServer(
-            domain: domain,
-            downloadFolderPath: downloadFolderPath,
-            uploadFolderPath: uploadFolderPath,
-            city: city,
-            country: country,
-            countryCode: countryCode,
-            id: id)
+      SpeedTestServer(
+        domain: domain,
+        downloadFolderPath: downloadFolderPath,
+        uploadFolderPath: uploadFolderPath,
+        city: city,
+        country: country,
+        countryCode: countryCode,
+        id: id,
+      ),
     );
   }
 
   void dispose() {
     _speedTestResultController.close();
+  }
+}
+
+class CellularInfo {
+  final int? cellId;
+  final int? enb;
+  final int? pci;
+  final int? tac;
+  final int? lac;
+  final int? mcc;
+  final int? mnc;
+  final int? channelNumber;
+  final String? type;
+  final bool? isFromDataSim;
+  final bool? isFromCallSim;
+  final int? lteRsrp; // Reference Signal Received Power
+  final int? lteRsrq; // Reference Signal Received Quality
+  final int? lteSinr; // Signal-to-Noise Ratio (RSSNR in the SDK)
+  final int? lteCqi; // Channel Quality Indicator
+  final int? nrRsrp; // 5G NR SS Reference Signal Received Power
+  final int? nrRsrq; // 5G NR SS Reference Signal Received Quality
+  final int? nrSinr; // 5G NR SS Signal-to-Noise and Interference Ratio
+  final int? gsmRssi; // GSM Received Signal Level
+  final int? wcdmaRscp; // 3G WCDMA CPICH RSCP
+
+  CellularInfo({
+    this.cellId,
+    this.enb,
+    this.pci,
+    this.tac,
+    this.lac,
+    this.mcc,
+    this.mnc,
+    this.channelNumber,
+    this.type,
+    this.isFromDataSim,
+    this.isFromCallSim,
+    this.lteRsrp,
+    this.lteRsrq,
+    this.lteSinr,
+    this.lteCqi,
+    this.nrRsrp,
+    this.nrRsrq,
+    this.nrSinr,
+    this.gsmRssi,
+    this.wcdmaRscp,
+  });
+
+  factory CellularInfo.fromJson(Map<Object?, dynamic> json) {
+    return CellularInfo(
+      cellId: json['cellId']?.toInt(),
+      enb: json['enb']?.toInt(),
+      pci: json['pci']?.toInt(),
+      tac: json['tac']?.toInt(),
+      lac: json['lac']?.toInt(),
+      mcc: json['mcc']?.toInt(),
+      mnc: json['mnc']?.toInt(),
+      channelNumber: json['channelNumber']?.toInt(),
+      type: json['type']?.toString(),
+      isFromDataSim: json['isFromDataSim'],
+      isFromCallSim: json['isFromCallSim'],
+      lteRsrp: json['lteRsrp']?.toInt(),
+      lteRsrq: json['lteRsrq']?.toInt(),
+      lteSinr: json['lteSinr']?.toInt(),
+      lteCqi: json['lteCqi']?.toInt(),
+      nrRsrp: json['nrRsrp']?.toInt(),
+      nrRsrq: json['nrRsrq']?.toInt(),
+      nrSinr: json['nrSinr']?.toInt(),
+      gsmRssi: json['gsmRssi']?.toInt(),
+      wcdmaRscp: json['wcdmaRscp']?.toInt(),
+    );
   }
 }
 
@@ -110,6 +192,9 @@ class SpeedTestResult {
   final String ip;
   final String isp;
 
+  // Add cellular info list to support multiple SIMs
+  final List<CellularInfo>? cellInfoList;
+
   SpeedTestResult({
     this.status = '',
     this.ping = 0,
@@ -128,9 +213,22 @@ class SpeedTestResult {
     this.warning = '',
     this.ip = '',
     this.isp = '',
+    this.cellInfoList,
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
+    // Create a list of cellular info objects if available
+    List<CellularInfo>? cellInfoList;
+    if (json['cellInfoList'] != null && json['cellInfoList'] is List) {
+      List<dynamic> list = json['cellInfoList'] as List;
+      cellInfoList =
+          list
+              .map(
+                (item) => CellularInfo.fromJson(item as Map<Object?, dynamic>),
+              )
+              .toList();
+    }
+
     return SpeedTestResult(
       status: json['status']?.toString() ?? '',
       ping: json['ping']?.toInt() ?? 0,
@@ -149,6 +247,7 @@ class SpeedTestResult {
       warning: json['warning']?.toString() ?? '',
       ip: json['ip']?.toString() ?? '',
       isp: json['isp']?.toString() ?? '',
+      cellInfoList: cellInfoList,
     );
   }
 }
@@ -201,7 +300,7 @@ class SpeedTestServer {
     required this.city,
     required this.country,
     required this.countryCode,
-    required this.id
+    required this.id,
   });
 
   Map<String, dynamic> toMap() {
