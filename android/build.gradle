@@ -44,5 +44,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.speedchecker:android-sdk:4.2.256'
+    implementation 'com.speedchecker:android-sdk:4.2.271'
 }
