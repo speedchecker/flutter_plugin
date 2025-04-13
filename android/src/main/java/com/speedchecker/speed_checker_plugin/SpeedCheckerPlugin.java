@@ -363,29 +363,65 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                                 } catch (Exception e) { }
                                 
                                 // Try to get SINR from LTE first, then fall back to NR if not available
+                                // try {
+                                //     int lteSinr = cellInfo.getLteRSSNR();
+                                //     if (lteSinr != Integer.MAX_VALUE) {
+                                //         cellMap.put("lteSinr", lteSinr);
+                                //     } else {
+                                //         // Try to get SINR from 5G as fallback
+                                //         try {
+                                //             int nrSinr = cellInfo.getNrSINR();
+                                //             if (nrSinr != Integer.MAX_VALUE) {
+                                //                 cellMap.put("lteSinr", nrSinr);  // Use 5G SINR as LTE SINR
+                                //             }
+                                //         } catch (Exception e) { }
+                                //     }
+                                // } catch (Exception e) {
+                                //     // Try to get SINR from 5G as fallback
+                                //     try {
+                                //         int nrSinr = cellInfo.getNrSINR();
+                                //         if (nrSinr != Integer.MAX_VALUE) {
+                                //             cellMap.put("lteSinr", nrSinr);  // Use 5G SINR as LTE SINR
+                                //         }
+                                //     } catch (Exception e2) { }
+                                // }
+                                // Replace the existing SINR extraction code with this
+                                // Replace the existing SINR extraction code with this
                                 try {
-                                    int lteSinr = cellInfo.getLteRSSNR();
-                                    if (lteSinr != Integer.MAX_VALUE) {
-                                        cellMap.put("lteSinr", lteSinr);
+                                    Integer customSinr = CustomCellInfoExtractor.extractSinrValue(cellInfo);
+                                    if (customSinr != null) {
+                                        cellMap.put("lteSinr", customSinr);
+                                        // Log the result to verify it's not zero
+                                        Log.d(TAG, "Final SINR value used: " + customSinr);
                                     } else {
-                                        // Try to get SINR from 5G as fallback
+                                        // If we still have no valid SINR, see if we can access Android's API directly
+                                        // Note: This requires proper permissions and context
+                                        // This is a placeholder that might need modification based on your app's structure
                                         try {
-                                            int nrSinr = cellInfo.getNrSINR();
-                                            if (nrSinr != Integer.MAX_VALUE) {
-                                                cellMap.put("lteSinr", nrSinr);  // Use 5G SINR as LTE SINR
+                                            // You would need access to TelephonyManager and proper permissions for this
+                                            /*
+                                            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                                            List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
+                                            
+                                            if (cellInfoList != null && !cellInfoList.isEmpty()) {
+                                                for (CellInfo info : cellInfoList) {
+                                                    Integer androidSinr = CustomCellInfoExtractor.extractSinrFromAndroidApi(info);
+                                                    if (androidSinr != null) {
+                                                        cellMap.put("lteSinr", androidSinr);
+                                                        Log.d(TAG, "SINR from Android API: " + androidSinr);
+                                                        break;
+                                                    }
+                                                }
                                             }
-                                        } catch (Exception e) { }
+                                            */
+                                            Log.d(TAG, "Direct Android API approach would require additional permissions");
+                                        } catch (Exception e) {
+                                            Log.e(TAG, "Error accessing Android cell info API", e);
+                                        }
                                     }
                                 } catch (Exception e) {
-                                    // Try to get SINR from 5G as fallback
-                                    try {
-                                        int nrSinr = cellInfo.getNrSINR();
-                                        if (nrSinr != Integer.MAX_VALUE) {
-                                            cellMap.put("lteSinr", nrSinr);  // Use 5G SINR as LTE SINR
-                                        }
-                                    } catch (Exception e2) { }
+                                    Log.e(TAG, "Error extracting SINR using custom extractor", e);
                                 }
-                                
                                 try {
                                     int lteCqi = cellInfo.getLteCQI();
                                     if (lteCqi != Integer.MAX_VALUE) {
