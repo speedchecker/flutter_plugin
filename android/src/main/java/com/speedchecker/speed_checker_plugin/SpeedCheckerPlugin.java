@@ -58,6 +58,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
         Context context = getContext();
         if (context != null) {
             SpeedcheckerSDK.init(context);
+            ManualCellInfoProvider.init(context); // Initialize the manual cell info provider
         }
     }
 
@@ -275,38 +276,61 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                                 // Get cellId and check if it's valid
                                 long cellId = cellInfo.getCellId();
                                 if (cellId != 2147483647L) {
-                                    cellMap.put("cellId", cellId);
-                                    // eNodeB ID calculation (first 28 bits of the cell ID for LTE)
-                                    cellMap.put("enb", cellId >> 8);
+                                    cellMap.put("cellId", cellId);  // Full Cell ID (e.g., 46866188)
+                                    
+                                    // Extract the eNodeB ID (everything except the last 8 bits)
+                                    long enbId = cellId >> 8;
+                                    cellMap.put("enb", enbId);
+                                    
+                                    // Extract the local cell ID (last 8 bits) - this is what G-NetTrack likely shows
+                                    int localCellId = (int)(cellId & 0xFF);
+                                    cellMap.put("localCellId", localCellId);
+                                    
+                                    // Extract the sector ID (bits 8-13, between eNodeB and local cell ID)
+                                    // This is useful for some network configurations
+                                    int sectorId = (int)((cellId & 0x3F00) >> 8);
+                                    cellMap.put("sectorId", sectorId);
+                                    
+                                    Log.d(TAG, String.format("Cell identifiers - Full: %d, eNodeB: %d, Local: %d, Sector: %d", 
+                                                            cellId, enbId, localCellId, sectorId));
                                 }
                                 
                                 // Use the exact method names from the SCellInfo class
                                 // Also check for sentinel values (Integer.MAX_VALUE)
                                 // Try to get PCI from LTE first, then try alternative sources if not available
-                                try { 
-                                    Integer pci = cellInfo.getLtePci();
-                                    if (pci != null && pci != Integer.MAX_VALUE) {
-                                        cellMap.put("pci", pci);
-                                    } else {
-                                        // Alternative: Some devices might calculate PCI from cellId
-                                        // cellId is already defined earlier in the code
-                                        if (cellId != 2147483647L) {
-                                            // On some networks, PCI might be derivable from cellId
-                                            // This is a heuristic approach - might not work on all networks
-                                            int derivedPci = (int)(cellId % 504); // 504 = 3 * 168 (standard PCI range)
-                                            cellMap.put("pci", derivedPci);
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    // Fallback: try to derive PCI from cellId
-                                    // cellId is already defined earlier in the code
-                                    if (cellId != 2147483647L) {
-                                        // On some networks, PCI might be derivable from cellId
-                                        // This is a heuristic approach - might not work on all networks
-                                        int derivedPci = (int)(cellId % 504); // 504 = 3 * 168 (standard PCI range)
-                                        cellMap.put("pci", derivedPci);
-                                    }
-                                }
+                                ManualCellInfoProvider.applyManualValues(cellMap);
+
+                            //     try { 
+                            //       Integer pci = cellInfo.getLtePci();
+                            //       if (pci != null && pci != Integer.MAX_VALUE) {
+                            //           cellMap.put("pci", pci);
+                            //       }
+                            //   } catch (Exception e) {
+                            //       Log.e(TAG, "Error getting PCI from getLtePci()", e);
+                                  
+                            //       // Alternative approach: Try to get PCI through the NR interface
+                            //       try {
+                            //           Integer nrPci = cellInfo.getNrPci();
+                            //           if (nrPci != null && nrPci != Integer.MAX_VALUE) {
+                            //               cellMap.put("pci", nrPci);
+                            //           }
+                            //       } catch (Exception e2) {
+                            //           Log.e(TAG, "Error getting PCI from getNrPci()", e2);
+                                      
+                            //           // Last resort: Check if there's a direct getPci() method
+                            //           try {
+                            //               Integer genericPci = cellInfo.getPci();
+                            //               if (genericPci != null && genericPci != Integer.MAX_VALUE) {
+                            //                   cellMap.put("pci", genericPci);
+                            //               }
+                            //           } catch (Exception e3) {
+                            //               Log.e(TAG, "Error getting PCI from getPci()", e3);
+                                          
+                            //               // If all attempts fail, don't add a PCI value rather than adding an incorrect one
+                            //               // Do NOT try to derive it from cellId as they're not directly related
+                            //           }
+                            //       }
+                            //   }
                                 
                                 try {
                                     int tac = cellInfo.getTAC();
@@ -383,45 +407,12 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                                 //         if (nrSinr != Integer.MAX_VALUE) {
                                 //             cellMap.put("lteSinr", nrSinr);  // Use 5G SINR as LTE SINR
                                 //         }
-                                //     } catch (Exception e2) { }
+                                //     } catch (Exception e2) {
+                                //         // Ignore exception
+                                //         cellMap.put("lteSinr", 0); // Default value if both are unavailable
+                                //      }
                                 // }
-                                // Replace the existing SINR extraction code with this
-                                // Replace the existing SINR extraction code with this
-                                try {
-                                    Integer customSinr = CustomCellInfoExtractor.extractSinrValue(cellInfo);
-                                    if (customSinr != null) {
-                                        cellMap.put("lteSinr", customSinr);
-                                        // Log the result to verify it's not zero
-                                        Log.d(TAG, "Final SINR value used: " + customSinr);
-                                    } else {
-                                        // If we still have no valid SINR, see if we can access Android's API directly
-                                        // Note: This requires proper permissions and context
-                                        // This is a placeholder that might need modification based on your app's structure
-                                        try {
-                                            // You would need access to TelephonyManager and proper permissions for this
-                                            /*
-                                            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                                            List<CellInfo> cellInfoList = telephonyManager.getAllCellInfo();
-                                            
-                                            if (cellInfoList != null && !cellInfoList.isEmpty()) {
-                                                for (CellInfo info : cellInfoList) {
-                                                    Integer androidSinr = CustomCellInfoExtractor.extractSinrFromAndroidApi(info);
-                                                    if (androidSinr != null) {
-                                                        cellMap.put("lteSinr", androidSinr);
-                                                        Log.d(TAG, "SINR from Android API: " + androidSinr);
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                            */
-                                            Log.d(TAG, "Direct Android API approach would require additional permissions");
-                                        } catch (Exception e) {
-                                            Log.e(TAG, "Error accessing Android cell info API", e);
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Error extracting SINR using custom extractor", e);
-                                }
+
                                 try {
                                     int lteCqi = cellInfo.getLteCQI();
                                     if (lteCqi != Integer.MAX_VALUE) {

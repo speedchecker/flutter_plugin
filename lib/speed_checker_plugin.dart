@@ -105,6 +105,8 @@ class SpeedCheckerPlugin {
 class CellularInfo {
   final int? cellId;
   final int? enb;
+  final int? localCellId; // Added field for local cell ID (last 8 bits)
+  final int? sectorId; // Added field for sector ID (bits 8-13)
   final int? pci;
   final int? tac;
   final int? lac;
@@ -127,6 +129,8 @@ class CellularInfo {
   CellularInfo({
     this.cellId,
     this.enb,
+    this.localCellId, // Added parameter
+    this.sectorId, // Added parameter
     this.pci,
     this.tac,
     this.lac,
@@ -151,6 +155,8 @@ class CellularInfo {
     return CellularInfo(
       cellId: json['cellId']?.toInt(),
       enb: json['enb']?.toInt(),
+      localCellId: json['localCellId']?.toInt(), // Added field
+      sectorId: json['sectorId']?.toInt(), // Added field
       pci: json['pci']?.toInt(),
       tac: json['tac']?.toInt(),
       lac: json['lac']?.toInt(),
