@@ -11,6 +11,7 @@ import com.speedchecker.android.sdk.Public.SpeedTestOptions;
 import com.speedchecker.android.sdk.Public.SpeedTestResult;
 import com.speedchecker.android.sdk.SpeedcheckerSDK;
 import com.speedchecker.android.sdk.Public.Model.SCellInfo; // Updated import path
+import com.speedchecker.android.sdk.Public.Model.CellCoverageInfo; // Updated import path
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -193,6 +194,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
 
     private void handleSpeedTestOptions(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         speedTestOptions = new SpeedTestOptions();
+        speedTestOptions.setSpeedTestType(2); // Set the speed test type to 2
         Boolean sendResults = call.argument("sendResultsToSpeedChecker");
         speedTestOptions.setSendResultsToSpeedChecker(sendResults != null && sendResults);
         result.success(null);
@@ -505,6 +507,28 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                     } catch (Exception e) {
                         Log.e(TAG, "Error processing cell info", e);
                     }
+                    try {
+                        CellCoverageInfo cellCoverageInfo = speedTestResult.cellCoverageInfo;
+
+                        if (cellCoverageInfo != null) {
+                            Map<String, Object> coverageMap = new HashMap<>();
+                            // Add coverage info to the map
+                            coverageMap.put("cellId", cellCoverageInfo.cellId);
+                            coverageMap.put("lac", cellCoverageInfo.lac);
+                            coverageMap.put("mcc", cellCoverageInfo.mcc);
+                            coverageMap.put("mnc", cellCoverageInfo.mnc);
+                            coverageMap.put("snr", cellCoverageInfo.snr);
+                            coverageMap.put("pci", cellCoverageInfo.pci);
+                            coverageMap.put("frequency", cellCoverageInfo.channelNumber);
+                            coverageMap.put("signalLevel", cellCoverageInfo.signalLevel);
+                            coverageMap.put("signalQuality", cellCoverageInfo.signalQuality);
+                            map.put("cellCoverageInfo", coverageMap);
+                        }
+                
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error getting cell info list", e);
+                    }
+                    
                 }
                 sendEvent();
                 clearState();

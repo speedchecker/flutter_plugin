@@ -200,6 +200,7 @@ class SpeedTestResult {
 
   // Add cellular info list to support multiple SIMs
   final List<CellularInfo>? cellInfoList;
+  final CellCoverageInfo? cellCoverageInfo;
 
   SpeedTestResult({
     this.status = '',
@@ -220,6 +221,7 @@ class SpeedTestResult {
     this.ip = '',
     this.isp = '',
     this.cellInfoList,
+    this.cellCoverageInfo = null,
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
@@ -233,6 +235,13 @@ class SpeedTestResult {
                 (item) => CellularInfo.fromJson(item as Map<Object?, dynamic>),
               )
               .toList();
+    }
+    // Create a cell coverage info object if available
+    CellCoverageInfo? cellCoverageInfo;
+    if (json['cellCoverageInfo'] != null) {
+      cellCoverageInfo = CellCoverageInfo.fromJson(
+        json['cellCoverageInfo'] as Map<Object?, dynamic>,
+      );
     }
 
     return SpeedTestResult(
@@ -254,6 +263,7 @@ class SpeedTestResult {
       ip: json['ip']?.toString() ?? '',
       isp: json['isp']?.toString() ?? '',
       cellInfoList: cellInfoList,
+      cellCoverageInfo: cellCoverageInfo,
     );
   }
 }
@@ -319,5 +329,43 @@ class SpeedTestServer {
       'countryCode': countryCode,
       'id': id,
     };
+  }
+}
+
+class CellCoverageInfo {
+  final int? cellId;
+  final int? lac;
+  final int? mcc;
+  final int? mnc;
+  final int? snr; // Signal-to-Noise Ratio
+  final int? pci; // Physical Cell ID
+  final int? frequency; // Channel Number
+  final int? signalLevel; // Signal Level (in dBm)
+  final int? signalQuality; // Signal Quality (in dB)
+
+  CellCoverageInfo({
+    this.cellId,
+    this.lac,
+    this.mcc,
+    this.mnc,
+    this.snr,
+    this.pci,
+    this.frequency,
+    this.signalLevel,
+    this.signalQuality,
+  });
+
+  factory CellCoverageInfo.fromJson(Map<Object?, dynamic> json) {
+    return CellCoverageInfo(
+      cellId: json['cellId']?.toInt(),
+      lac: json['lac']?.toInt(),
+      mcc: json['mcc']?.toInt(),
+      mnc: json['mnc']?.toInt(),
+      snr: json['snr']?.toInt(),
+      pci: json['pci']?.toInt(),
+      frequency: json['frequency']?.toInt(),
+      signalLevel: json['signalLevel']?.toInt(),
+      signalQuality: json['signalQuality']?.toInt(),
+    );
   }
 }
