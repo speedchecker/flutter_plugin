@@ -333,39 +333,45 @@ class SpeedTestServer {
 }
 
 class CellCoverageInfo {
-  final int? cellId;
-  final int? lac;
-  final int? mcc;
-  final int? mnc;
-  final int? snr; // Signal-to-Noise Ratio
+  final int? rsrp; // Reference Signal Received Power
+  final int? rsrq; // Reference Signal Received Quality
+  final int? sinr; // Signal-to-Interference-plus-Noise Ratio
+  final int? arfcn; // Absolute Radio Frequency Channel Number
+  final int? tac; // Tracking Area Code
   final int? pci; // Physical Cell ID
-  final int? frequency; // Channel Number
-  final int? signalLevel; // Signal Level (in dBm)
-  final int? signalQuality; // Signal Quality (in dB)
+  final int? enbId; // eNodeB ID
+  final int? localCellId; // Local Cell ID
+  final int? eci; // E-UTRAN Cell Identifier (same as cellId)
+  final int? mcc; // Mobile Country Code
+  final int? mnc; // Mobile Network Code
+
+  // New fields
 
   CellCoverageInfo({
-    this.cellId,
-    this.lac,
+    this.pci,
+    this.enbId,
+    this.localCellId,
+    this.eci,
+    this.tac,
+    this.rsrp,
+    this.rsrq,
+    this.sinr,
+    this.arfcn,
     this.mcc,
     this.mnc,
-    this.snr,
-    this.pci,
-    this.frequency,
-    this.signalLevel,
-    this.signalQuality,
   });
 
   factory CellCoverageInfo.fromJson(Map<Object?, dynamic> json) {
     return CellCoverageInfo(
-      cellId: json['cellId']?.toInt(),
-      lac: json['lac']?.toInt(),
-      mcc: json['mcc']?.toInt(),
-      mnc: json['mnc']?.toInt(),
-      snr: json['snr']?.toInt(),
       pci: json['pci']?.toInt(),
-      frequency: json['frequency']?.toInt(),
-      signalLevel: json['signalLevel']?.toInt(),
-      signalQuality: json['signalQuality']?.toInt(),
+      enbId: json['enbId']?.toInt(),
+      localCellId: json['localCellId']?.toInt(),
+      eci: json['eci']?.toInt(),
+      tac: json['tac']?.toInt(),
+      rsrp: json['rsrp']?.toInt(),
+      rsrq: json['rsrq']?.toInt(),
+      sinr: json['sinr']?.toInt(),
+      arfcn: json['arfcn']?.toInt(),
     );
   }
 }

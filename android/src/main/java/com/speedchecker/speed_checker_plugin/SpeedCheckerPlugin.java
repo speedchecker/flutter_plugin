@@ -507,26 +507,50 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                     } catch (Exception e) {
                         Log.e(TAG, "Error processing cell info", e);
                     }
+                    // try {
+                    //     CellCoverageInfo cellCoverageInfo = speedTestResult.cellCoverageInfo;
+
+                    //     if (cellCoverageInfo != null) {
+                    //         Map<String, Object> coverageMap = new HashMap<>();
+                    //         // Add coverage info to the map
+                    //         coverageMap.put("cellId", cellCoverageInfo.cellId);
+                    //         coverageMap.put("lac", cellCoverageInfo.lac);
+                    //         coverageMap.put("mcc", cellCoverageInfo.mcc);
+                    //         coverageMap.put("mnc", cellCoverageInfo.mnc);
+                    //         coverageMap.put("snr", cellCoverageInfo.snr);
+                    //         coverageMap.put("pci", cellCoverageInfo.pci);
+                    //         coverageMap.put("frequency", cellCoverageInfo.channelNumber);
+                    //         coverageMap.put("signalLevel", cellCoverageInfo.signalLevel);
+                    //         coverageMap.put("signalQuality", cellCoverageInfo.signalQuality);
+                    //         map.put("cellCoverageInfo", coverageMap);
+                    //     }
+                
+                    // } catch (Exception e) {
+                    //     Log.e(TAG, "Error getting cell info list", e);
+                    // }
                     try {
                         CellCoverageInfo cellCoverageInfo = speedTestResult.cellCoverageInfo;
-
+                    
                         if (cellCoverageInfo != null) {
                             Map<String, Object> coverageMap = new HashMap<>();
-                            // Add coverage info to the map
-                            coverageMap.put("cellId", cellCoverageInfo.cellId);
-                            coverageMap.put("lac", cellCoverageInfo.lac);
-                            coverageMap.put("mcc", cellCoverageInfo.mcc);
-                            coverageMap.put("mnc", cellCoverageInfo.mnc);
-                            coverageMap.put("snr", cellCoverageInfo.snr);
-                            coverageMap.put("pci", cellCoverageInfo.pci);
-                            coverageMap.put("frequency", cellCoverageInfo.channelNumber);
-                            coverageMap.put("signalLevel", cellCoverageInfo.signalLevel);
-                            coverageMap.put("signalQuality", cellCoverageInfo.signalQuality);
+                            coverageMap.put("rsrp", cellCoverageInfo.signalLevel); // Assuming signalLevel is the RSRP value
+                            coverageMap.put("rsrq", cellCoverageInfo.signalQuality); // Assuming signalQuality is the RSRQ value
+                            coverageMap.put("sinr", cellCoverageInfo.snr); // Assuming snr is the SINR value
+                            coverageMap.put("arfcn", cellCoverageInfo.channelNumber); // ARFCN is the Absolute Radio Frequency Channel Number
+                            coverageMap.put("tac", cellCoverageInfo.lac); // Tracking Area Code
+                            coverageMap.put("pci", cellCoverageInfo.pci); // Physical Cell ID
+                            coverageMap.put("mcc", cellCoverageInfo.mcc); // MCC is Mobile Country Code
+                            coverageMap.put("mnc", cellCoverageInfo.mnc); // MNC is Mobile Network Code
+                            if (cellCoverageInfo.cellId != null) {
+                                coverageMap.put("enbId", cellCoverageInfo.cellId >> 8); // eNodeB ID (everything except the last 8 bits)
+                                coverageMap.put("localCellId", cellCoverageInfo.cellId & 0xFF); // Local Cell ID (last 8 bits)
+                                coverageMap.put("eci", cellCoverageInfo.cellId);  // ECI is same as cellId for LTE
+                            }
+                            
                             map.put("cellCoverageInfo", coverageMap);
                         }
-                
                     } catch (Exception e) {
-                        Log.e(TAG, "Error getting cell info list", e);
+                        Log.e(TAG, "Error getting cell coverage info", e);
                     }
                     
                 }
