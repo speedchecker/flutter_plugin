@@ -280,6 +280,8 @@ class CellCoverageInfo {
       rsrq: json['rsrq']?.toInt(),
       sinr: json['sinr']?.toInt(),
       arfcn: json['arfcn']?.toInt(),
+      mcc: json['mcc']?.toInt(),
+      mnc: json['mnc']?.toInt(),
     );
   }
 }
