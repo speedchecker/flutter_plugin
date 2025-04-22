@@ -3,11 +3,17 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 
 class SpeedCheckerPlugin {
-  static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
-  static const MethodChannel _methodChannel = MethodChannel('speedChecker_methodChannel');
+  static const EventChannel _eventChannel = EventChannel(
+    'speedChecker_eventChannel',
+  );
+  static const MethodChannel _methodChannel = MethodChannel(
+    'speedChecker_methodChannel',
+  );
 
-  final _speedTestResultController = StreamController<SpeedTestResult>.broadcast();
-  Stream<SpeedTestResult> get speedTestResultStream => _speedTestResultController.stream;
+  final _speedTestResultController =
+      StreamController<SpeedTestResult>.broadcast();
+  Stream<SpeedTestResult> get speedTestResultStream =>
+      _speedTestResultController.stream;
 
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -38,7 +44,10 @@ class SpeedCheckerPlugin {
     });
   }
 
-  void startSpeedTestWithOptionsAndServer(SpeedTestOptions options, SpeedTestServer server) {
+  void startSpeedTestWithOptionsAndServer(
+    SpeedTestOptions options,
+    SpeedTestServer server,
+  ) {
     _methodChannel.invokeMethod('speedTestOptions', options.toMap());
     _methodChannel.invokeMethod('customServer', server.toMap());
     _eventChannel.receiveBroadcastStream().listen((event) {
@@ -66,23 +75,25 @@ class SpeedCheckerPlugin {
   }
 
   @Deprecated('Use startSpeedTestWithServer instead')
-  void startSpeedTestWithCustomServer(
-      {required String domain,
-      required String downloadFolderPath,
-      required String uploadFolderPath,
-      required String city,
-      required String country,
-      required String countryCode,
-      required int id}) {
+  void startSpeedTestWithCustomServer({
+    required String domain,
+    required String downloadFolderPath,
+    required String uploadFolderPath,
+    required String city,
+    required String country,
+    required String countryCode,
+    required int id,
+  }) {
     startSpeedTestWithServer(
-        SpeedTestServer(
-            domain: domain,
-            downloadFolderPath: downloadFolderPath,
-            uploadFolderPath: uploadFolderPath,
-            city: city,
-            country: country,
-            countryCode: countryCode,
-            id: id)
+      SpeedTestServer(
+        domain: domain,
+        downloadFolderPath: downloadFolderPath,
+        uploadFolderPath: uploadFolderPath,
+        city: city,
+        country: country,
+        countryCode: countryCode,
+        id: id,
+      ),
     );
   }
 
@@ -110,6 +121,8 @@ class SpeedTestResult {
   final String ip;
   final String isp;
 
+  final CellCoverageInfo? cellCoverageInfo;
+
   SpeedTestResult({
     this.status = '',
     this.ping = 0,
@@ -128,9 +141,18 @@ class SpeedTestResult {
     this.warning = '',
     this.ip = '',
     this.isp = '',
+    this.cellCoverageInfo = null,
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
+    // Create a cell coverage info object if available
+    CellCoverageInfo? cellCoverageInfo;
+    if (json['cellCoverageInfo'] != null) {
+      cellCoverageInfo = CellCoverageInfo.fromJson(
+        json['cellCoverageInfo'] as Map<Object?, dynamic>,
+      );
+    }
+
     return SpeedTestResult(
       status: json['status']?.toString() ?? '',
       ping: json['ping']?.toInt() ?? 0,
@@ -149,6 +171,7 @@ class SpeedTestResult {
       warning: json['warning']?.toString() ?? '',
       ip: json['ip']?.toString() ?? '',
       isp: json['isp']?.toString() ?? '',
+      cellCoverageInfo: cellCoverageInfo,
     );
   }
 }
@@ -201,7 +224,7 @@ class SpeedTestServer {
     required this.city,
     required this.country,
     required this.countryCode,
-    required this.id
+    required this.id,
   });
 
   Map<String, dynamic> toMap() {
@@ -214,5 +237,51 @@ class SpeedTestServer {
       'countryCode': countryCode,
       'id': id,
     };
+  }
+}
+
+class CellCoverageInfo {
+  final int? rsrp; // Reference Signal Received Power
+  final int? rsrq; // Reference Signal Received Quality
+  final int? sinr; // Signal-to-Interference-plus-Noise Ratio
+  final int? arfcn; // Absolute Radio Frequency Channel Number
+  final int? tac; // Tracking Area Code
+  final int? pci; // Physical Cell ID
+  final int? enbId; // eNodeB ID
+  final int? localCellId; // Local Cell ID
+  final int? eci; // E-UTRAN Cell Identifier (same as cellId)
+  final int? mcc; // Mobile Country Code
+  final int? mnc; // Mobile Network Code
+
+  // New fields
+
+  CellCoverageInfo({
+    this.pci,
+    this.enbId,
+    this.localCellId,
+    this.eci,
+    this.tac,
+    this.rsrp,
+    this.rsrq,
+    this.sinr,
+    this.arfcn,
+    this.mcc,
+    this.mnc,
+  });
+
+  factory CellCoverageInfo.fromJson(Map<Object?, dynamic> json) {
+    return CellCoverageInfo(
+      pci: json['pci']?.toInt(),
+      enbId: json['enbId']?.toInt(),
+      localCellId: json['localCellId']?.toInt(),
+      eci: json['eci']?.toInt(),
+      tac: json['tac']?.toInt(),
+      rsrp: json['rsrp']?.toInt(),
+      rsrq: json['rsrq']?.toInt(),
+      sinr: json['sinr']?.toInt(),
+      arfcn: json['arfcn']?.toInt(),
+      mcc: json['mcc']?.toInt(),
+      mnc: json['mnc']?.toInt(),
+    );
   }
 }
