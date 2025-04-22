@@ -102,83 +102,6 @@ class SpeedCheckerPlugin {
   }
 }
 
-class CellularInfo {
-  final int? cellId;
-  final int? enb;
-  final int? localCellId; // Added field for local cell ID (last 8 bits)
-  final int? sectorId; // Added field for sector ID (bits 8-13)
-  final int? pci;
-  final int? tac;
-  final int? lac;
-  final int? mcc;
-  final int? mnc;
-  final int? channelNumber;
-  final String? type;
-  final bool? isFromDataSim;
-  final bool? isFromCallSim;
-  final int? lteRsrp; // Reference Signal Received Power
-  final int? lteRsrq; // Reference Signal Received Quality
-  final int? lteSinr; // Signal-to-Noise Ratio (RSSNR in the SDK)
-  final int? lteCqi; // Channel Quality Indicator
-  final int? nrRsrp; // 5G NR SS Reference Signal Received Power
-  final int? nrRsrq; // 5G NR SS Reference Signal Received Quality
-  final int? nrSinr; // 5G NR SS Signal-to-Noise and Interference Ratio
-  final int? gsmRssi; // GSM Received Signal Level
-  final int? wcdmaRscp; // 3G WCDMA CPICH RSCP
-
-  CellularInfo({
-    this.cellId,
-    this.enb,
-    this.localCellId, // Added parameter
-    this.sectorId, // Added parameter
-    this.pci,
-    this.tac,
-    this.lac,
-    this.mcc,
-    this.mnc,
-    this.channelNumber,
-    this.type,
-    this.isFromDataSim,
-    this.isFromCallSim,
-    this.lteRsrp,
-    this.lteRsrq,
-    this.lteSinr,
-    this.lteCqi,
-    this.nrRsrp,
-    this.nrRsrq,
-    this.nrSinr,
-    this.gsmRssi,
-    this.wcdmaRscp,
-  });
-
-  factory CellularInfo.fromJson(Map<Object?, dynamic> json) {
-    return CellularInfo(
-      cellId: json['cellId']?.toInt(),
-      enb: json['enb']?.toInt(),
-      localCellId: json['localCellId']?.toInt(), // Added field
-      sectorId: json['sectorId']?.toInt(), // Added field
-      pci: json['pci']?.toInt(),
-      tac: json['tac']?.toInt(),
-      lac: json['lac']?.toInt(),
-      mcc: json['mcc']?.toInt(),
-      mnc: json['mnc']?.toInt(),
-      channelNumber: json['channelNumber']?.toInt(),
-      type: json['type']?.toString(),
-      isFromDataSim: json['isFromDataSim'],
-      isFromCallSim: json['isFromCallSim'],
-      lteRsrp: json['lteRsrp']?.toInt(),
-      lteRsrq: json['lteRsrq']?.toInt(),
-      lteSinr: json['lteSinr']?.toInt(),
-      lteCqi: json['lteCqi']?.toInt(),
-      nrRsrp: json['nrRsrp']?.toInt(),
-      nrRsrq: json['nrRsrq']?.toInt(),
-      nrSinr: json['nrSinr']?.toInt(),
-      gsmRssi: json['gsmRssi']?.toInt(),
-      wcdmaRscp: json['wcdmaRscp']?.toInt(),
-    );
-  }
-}
-
 class SpeedTestResult {
   final String status;
   final int ping;
@@ -198,8 +121,6 @@ class SpeedTestResult {
   final String ip;
   final String isp;
 
-  // Add cellular info list to support multiple SIMs
-  final List<CellularInfo>? cellInfoList;
   final CellCoverageInfo? cellCoverageInfo;
 
   SpeedTestResult({
@@ -220,22 +141,10 @@ class SpeedTestResult {
     this.warning = '',
     this.ip = '',
     this.isp = '',
-    this.cellInfoList,
     this.cellCoverageInfo = null,
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
-    // Create a list of cellular info objects if available
-    List<CellularInfo>? cellInfoList;
-    if (json['cellInfoList'] != null && json['cellInfoList'] is List) {
-      List<dynamic> list = json['cellInfoList'] as List;
-      cellInfoList =
-          list
-              .map(
-                (item) => CellularInfo.fromJson(item as Map<Object?, dynamic>),
-              )
-              .toList();
-    }
     // Create a cell coverage info object if available
     CellCoverageInfo? cellCoverageInfo;
     if (json['cellCoverageInfo'] != null) {
@@ -262,7 +171,6 @@ class SpeedTestResult {
       warning: json['warning']?.toString() ?? '',
       ip: json['ip']?.toString() ?? '',
       isp: json['isp']?.toString() ?? '',
-      cellInfoList: cellInfoList,
       cellCoverageInfo: cellCoverageInfo,
     );
   }
