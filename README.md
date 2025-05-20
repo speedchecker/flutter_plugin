@@ -102,15 +102,21 @@ String _isp = '';
 
 #### 2. Set license key (for paid clients).
 if you have a license key, you can add your key as a String value in the app:
-
-```dart
-_plugin.setAndroidLicenseKey('your_license_key');
-```
 ```dart
 _plugin.setIosLicenseKey('your_license_key');
 ```
+For Android licenseKey should be setup in Application onCreate method in native flutter project code.
+<pre>
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        SpeedcheckerSDK.setLicenseKey(this, "Insert your key here")
+    }
+}
+</pre>
+
 Licenses should be set _before_ starting the test. Make sure your package name (for Android) or bundle id (for iOS) is the same as
-defined in your license agreement. You can use both methods simultaneously if you have licenses for both platforms
+defined in your license agreement.
 
 #### 3. Start 'startSpeedTest' method in your class.
 You can start this method on custom event, such as button click
@@ -202,7 +208,7 @@ _subscription = _plugin.speedTestResultStream.listen((result) {
 
 ## Demo application
 
-Please check our [demo application](https://github.com/speedchecker/flutter_plugin) in Flutter which includes speed test functionality as well as
+Please check our [demo application](https://github.com/speedchecker/flutter_plugin/tree/main/example) in Flutter which includes speed test functionality as well as
 speedometer UI.
 
 ## License
