@@ -53,12 +53,6 @@ class SpeedCheckerPlugin {
     _methodChannel.invokeMethod('stopTest');
   }
 
-  void setAndroidLicenseKey(String license) {
-    if (Platform.isAndroid) {
-      _methodChannel.invokeMethod('setLicenseKey', {'androidKey': license});
-    }
-  }
-
   void setIosLicenseKey(String license) {
     if (Platform.isIOS) {
       _methodChannel.invokeMethod('setLicenseKey', {'iosKey': license});
@@ -109,6 +103,7 @@ class SpeedTestResult {
   final String warning;
   final String ip;
   final String isp;
+  final String packetLoss;
 
   SpeedTestResult({
     this.status = '',
@@ -128,6 +123,7 @@ class SpeedTestResult {
     this.warning = '',
     this.ip = '',
     this.isp = '',
+    this.packetLoss = ''
   });
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
@@ -149,6 +145,7 @@ class SpeedTestResult {
       warning: json['warning']?.toString() ?? '',
       ip: json['ip']?.toString() ?? '',
       isp: json['isp']?.toString() ?? '',
+      packetLoss: json['packetLoss']?.toString() ?? '',
     );
   }
 }

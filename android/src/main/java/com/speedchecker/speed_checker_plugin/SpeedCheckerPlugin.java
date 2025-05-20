@@ -65,6 +65,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                         map.put("uploadTransferredMb", 0.0);
                         map.put("ip", "");
                         map.put("isp", "");
+                        map.put("packetLoss", "");
                         eventSink.success(map);
                     }
 
@@ -91,6 +92,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
                         map.put("deviceInfo", speedTestResult.getDeviceInfo());
                         map.put("downloadTransferredMb", speedTestResult.getDownloadTransferredMb());
                         map.put("uploadTransferredMb", speedTestResult.getUploadTransferredMb());
+                        map.put("packetLoss", String.valueOf(speedTestResult.getPacketLoss()));
                         if (isCustomServer) {
                             SpeedcheckerSDK.SpeedTest.getBestServer(context, server -> {
                                 map.put("ip", server.UserIP);

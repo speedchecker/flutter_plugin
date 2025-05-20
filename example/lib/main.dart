@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   double _uploadSpeed = 0;
   String _ip = '';
   String _isp = '';
+  String _packetLoss = '';
   final _plugin = SpeedCheckerPlugin();
   late StreamSubscription<SpeedTestResult> _subscription;
 
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
+        _packetLoss = result.packetLoss;
         if (result.error.isNotEmpty) {
           Fluttertoast.showToast(msg: result.error.toString());
         }
@@ -90,6 +92,7 @@ class _MyAppState extends State<MyApp> {
         _connectionType = '';
         _ip = '';
         _isp = '';
+        _packetLoss = '';
       });
     }, onDone: () {
       _subscription.cancel();
@@ -217,40 +220,46 @@ class _MyAppState extends State<MyApp> {
                 Container(
                   alignment: Alignment.topLeft,
                   margin: const EdgeInsets.only(left: 50),
-                  child: Wrap(
-                    direction: Axis.vertical,
-                    spacing: 5,
-                    children: [
-                      Text(
-                        'Server: $_server',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'Ping: $_ping',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'Download speed: ${_downloadSpeed.toStringAsFixed(2)} Mbps',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'Upload speed: ${_uploadSpeed.toStringAsFixed(2)} Mbps',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'Connection Type: $_connectionType',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'User IP: $_ip',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'User ISP: $_isp',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      direction: Axis.vertical,
+                      spacing: 5,
+                      children: [
+                        Text(
+                          'Server: $_server',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Ping: $_ping',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Download speed: ${_downloadSpeed.toStringAsFixed(2)} Mbps',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Upload speed: ${_uploadSpeed.toStringAsFixed(2)} Mbps',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Connection Type: $_connectionType',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Packet Loss: $_packetLoss',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'User IP: $_ip',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'User ISP: $_isp',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  )
                 )
               ],
             ),

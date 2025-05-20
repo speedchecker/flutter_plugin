@@ -34,4 +34,6 @@
 * Added support for starting test with SpeedTestOptions and SpeedTestServer.
 ## 1.0.21
 * Resolved iOS crash.
+* ## 1.0.25
+* Add packet loss parameter
 
