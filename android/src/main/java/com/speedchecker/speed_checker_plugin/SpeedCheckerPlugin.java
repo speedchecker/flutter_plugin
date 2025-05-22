@@ -235,6 +235,7 @@ public class SpeedCheckerPlugin implements FlutterPlugin, MethodChannel.MethodCa
             server.Location.Country = call.argument("country");
             server.Location.CountryCode = call.argument("countryCode");
             result.success("Custom server set");
+            Log.e("test", "path : " + server.DownloadFolderPath + ":" +  server.Domain);
         } else if (call.method.equals("stopTest")) {
             SpeedcheckerSDK.SpeedTest.interruptTest();
             map.put("status", "Speed test stopped");

@@ -104,8 +104,8 @@ class _MyAppState extends State<MyApp> {
         const SpeedTestOptions(sendResultsToSpeedChecker: true),
         const SpeedTestServer(
             domain: 'dig20ny.speedcheckerapi.com',
-            downloadFolderPath: '/',
-            uploadFolderPath: '/',
+            downloadFolderPath: '/speedchecker/',
+            uploadFolderPath: '/speedchecker/',
             city: 'New York 2',
             country: 'USA',
             countryCode: 'US',
@@ -123,6 +123,7 @@ class _MyAppState extends State<MyApp> {
         _connectionType = result.connectionType;
         _ip = result.ip;
         _isp = result.isp;
+        _packetLoss = result.packetLoss;
         if (result.error.isNotEmpty) {
           Fluttertoast.showToast(msg: result.error.toString());
         }
@@ -242,19 +243,15 @@ class _MyAppState extends State<MyApp> {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'Connection Type: $_connectionType',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
                           'Packet Loss: $_packetLoss',
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'User IP: $_ip',
+                          'Connection Type: $_connectionType',
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'User ISP: $_isp',
+                          'User IP: $_ip',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
