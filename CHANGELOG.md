@@ -36,4 +36,6 @@
 * Resolved iOS crash.
 * ## 1.0.25
 * Add packet loss parameter
+* ## 1.0.26
+* Migrate to gradle 8.5
 
