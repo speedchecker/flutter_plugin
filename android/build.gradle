@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:8.5.0'
     }
 }
 
@@ -30,6 +30,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.speedchecker.speed_checker_plugin'
     compileSdkVersion 34
 
     compileOptions {
@@ -43,5 +44,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.speedchecker:android-sdk:4.2.256'
+    implementation 'com.speedchecker:android-sdk:4.2.282'
 }
