@@ -48,7 +48,7 @@ gradle file: Your_project_folder/android/app/build.gradle
 
 * Xcode 13.3.1 or later
 * Swift 5
-* Development Target 11.0 or later
+* Development Target 12.0 or later
 
 ## Installation
 
@@ -62,7 +62,7 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 
 ```yaml
 dependencies:
-  speed_checker_plugin: ^1.0.26
+  speed_checker_plugin: ^1.0.27
 ```
 
 #### 2. Import speed_checker_plugin in your Dart class.

@@ -223,13 +223,14 @@ extension SpeedCheckerPlugin: InternetSpeedTestDelegate {
         resultDict["jitter"] = result.jitter
         resultDict["downloadSpeed"] = result.downloadSpeed.mbps
         resultDict["uploadSpeed"] = result.uploadSpeed.mbps
-        resultDict["connectionType"] = result.connectionType
+        resultDict["connectionType"] = result.connectionType?.stringValue
         resultDict["serverInfo"] = [result.server.cityName, result.server.country].compactMap({ $0 }).joined(separator: ", ")
         resultDict["deviceInfo"] = result.deviceInfo
         resultDict["downloadTransferredMb"] = result.downloadTransferredMb
         resultDict["uploadTransferredMb"] = result.uploadTransferredMb
         resultDict["ip"] = result.ipAddress
         resultDict["isp"] = result.ispName
+        resultDict["packetLoss"] = result.packetLoss?.packetLoss
         sendResultDict()
         resetStartParameters()
     }

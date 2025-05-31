@@ -6,10 +6,10 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - speed_checker_plugin (1.0.21):
+  - speed_checker_plugin (1.0.27):
     - Flutter
-    - SpeedcheckerSDK (= 2.0.3)
-  - SpeedcheckerSDK (2.0.3)
+    - SpeedcheckerSDK (= 2.2.9)
+  - SpeedcheckerSDK (2.2.9)
   - Toast (4.1.0)
 
 DEPENDENCIES:
@@ -35,12 +35,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  speed_checker_plugin: 24e7547c8b02bb2b7ac58a5307de5af3f886cf69
-  SpeedcheckerSDK: a58ef91c841db1f4a5ef906f501ddc4bf267ee54
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  speed_checker_plugin: 7ecabb898ec2045afdbba161b5bb5aa28c07d585
+  SpeedcheckerSDK: 4757a2b407fed1e29a713dd0448080f3bbdf62da
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

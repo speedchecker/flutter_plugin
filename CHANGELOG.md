@@ -38,4 +38,6 @@
 * Add packet loss parameter
 * ## 1.0.26
 * Migrate to gradle 8.5
+* ## 1.0.27
+* Update iOS SpeedcheckerSDK version.
 
