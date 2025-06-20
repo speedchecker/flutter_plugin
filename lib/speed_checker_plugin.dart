@@ -3,17 +3,24 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 
 class SpeedCheckerPlugin {
-  static const EventChannel _eventChannel = EventChannel('speedChecker_eventChannel');
-  static const MethodChannel _methodChannel = MethodChannel('speedChecker_methodChannel');
+  static const EventChannel _eventChannel =
+      EventChannel('speedChecker_eventChannel');
+  static const MethodChannel _methodChannel =
+      MethodChannel('speedChecker_methodChannel');
 
-  final _speedTestResultController = StreamController<SpeedTestResult>.broadcast();
-  Stream<SpeedTestResult> get speedTestResultStream => _speedTestResultController.stream;
+  final _speedTestResultController =
+      StreamController<SpeedTestResult>.broadcast();
+
+  Stream<SpeedTestResult> get speedTestResultStream =>
+      _speedTestResultController.stream;
 
   void startSpeedTest() {
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult.fromJson(event);
-        _speedTestResultController.add(result);
+        if (!_speedTestResultController.isClosed) {
+          _speedTestResultController.add(result);
+        }
       }
     });
   }
@@ -23,7 +30,9 @@ class SpeedCheckerPlugin {
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult.fromJson(event);
-        _speedTestResultController.add(result);
+        if (!_speedTestResultController.isClosed) {
+          _speedTestResultController.add(result);
+        }
       }
     });
   }
@@ -33,18 +42,23 @@ class SpeedCheckerPlugin {
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult.fromJson(event);
-        _speedTestResultController.add(result);
+        if (!_speedTestResultController.isClosed) {
+          _speedTestResultController.add(result);
+        }
       }
     });
   }
 
-  void startSpeedTestWithOptionsAndServer(SpeedTestOptions options, SpeedTestServer server) {
+  void startSpeedTestWithOptionsAndServer(
+      SpeedTestOptions options, SpeedTestServer server) {
     _methodChannel.invokeMethod('speedTestOptions', options.toMap());
     _methodChannel.invokeMethod('customServer', server.toMap());
     _eventChannel.receiveBroadcastStream().listen((event) {
       if (event is Map<Object?, dynamic>) {
         final result = SpeedTestResult.fromJson(event);
-        _speedTestResultController.add(result);
+        if (!_speedTestResultController.isClosed) {
+          _speedTestResultController.add(result);
+        }
       }
     });
   }
@@ -68,16 +82,14 @@ class SpeedCheckerPlugin {
       required String country,
       required String countryCode,
       required int id}) {
-    startSpeedTestWithServer(
-        SpeedTestServer(
-            domain: domain,
-            downloadFolderPath: downloadFolderPath,
-            uploadFolderPath: uploadFolderPath,
-            city: city,
-            country: country,
-            countryCode: countryCode,
-            id: id)
-    );
+    startSpeedTestWithServer(SpeedTestServer(
+        domain: domain,
+        downloadFolderPath: downloadFolderPath,
+        uploadFolderPath: uploadFolderPath,
+        city: city,
+        country: country,
+        countryCode: countryCode,
+        id: id));
   }
 
   void dispose() {
@@ -105,26 +117,25 @@ class SpeedTestResult {
   final String isp;
   final String packetLoss;
 
-  SpeedTestResult({
-    this.status = '',
-    this.ping = 0,
-    this.jitter = 0,
-    this.percent = 0,
-    this.currentSpeed = 0.0,
-    this.downloadSpeed = 0.0,
-    this.uploadSpeed = 0.0,
-    this.server = '',
-    this.connectionType = '',
-    this.serverInfo = '',
-    this.deviceInfo = '',
-    this.downloadTransferredMb = 0.0,
-    this.uploadTransferredMb = 0.0,
-    this.error = '',
-    this.warning = '',
-    this.ip = '',
-    this.isp = '',
-    this.packetLoss = ''
-  });
+  SpeedTestResult(
+      {this.status = '',
+      this.ping = 0,
+      this.jitter = 0,
+      this.percent = 0,
+      this.currentSpeed = 0.0,
+      this.downloadSpeed = 0.0,
+      this.uploadSpeed = 0.0,
+      this.server = '',
+      this.connectionType = '',
+      this.serverInfo = '',
+      this.deviceInfo = '',
+      this.downloadTransferredMb = 0.0,
+      this.uploadTransferredMb = 0.0,
+      this.error = '',
+      this.warning = '',
+      this.ip = '',
+      this.isp = '',
+      this.packetLoss = ''});
 
   factory SpeedTestResult.fromJson(Map<Object?, dynamic> json) {
     return SpeedTestResult(
@@ -191,15 +202,14 @@ class SpeedTestServer {
   final String countryCode;
   final int id;
 
-  const SpeedTestServer({
-    required this.domain,
-    required this.downloadFolderPath,
-    required this.uploadFolderPath,
-    required this.city,
-    required this.country,
-    required this.countryCode,
-    required this.id
-  });
+  const SpeedTestServer(
+      {required this.domain,
+      required this.downloadFolderPath,
+      required this.uploadFolderPath,
+      required this.city,
+      required this.country,
+      required this.countryCode,
+      required this.id});
 
   Map<String, dynamic> toMap() {
     return {
